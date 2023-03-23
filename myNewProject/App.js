@@ -6,7 +6,7 @@ import {
   Text,
   ImageBackground,
   TextInput, 
-  Button
+  TouchableOpacity
 } from "react-native";
 
 export default function App() {
@@ -22,6 +22,9 @@ export default function App() {
          <TextInput style={styles.input} textAlign={'left'}/>
           <TextInput style={styles.input} textAlign={'left'}/>
           <TextInput style={styles.input} textAlign={'left'} secureTextEntry={true}/>
+          <TouchableOpacity style={styles.btn}>
+            <Text>Sign in</Text>
+          </TouchableOpacity>
          </View>
           
         
@@ -68,23 +71,27 @@ paddingLeft: 16,
     borderTopLeftRadius: 25,
   },
 
-//   input: {
-//     flex: 1,
-// borderWidth: 1,
-// marginHorizontal: 50,
-// height: 50,
-// borderRadius: 8,
-// backgroundColor: '#F6F6F6',
-// borderColor: '#E8E8E8'
-//   }, 
   text: {
     color: "#212121",
-    fontFamily: 'Roboto',
+    // fontFamily: 'Roboto',
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 32,
     marginTop: 90,
     
+  },
+  btn: {
+    borderWidth: 1,
+    height: 50,
+borderRadius: 100,
+backgroundColor: '#FF6C00',
+borderColor: "#ffffff",
+marginHorizontal: 16,
+marginTop: 27,
+marginBottom: 16,
+paddingLeft: 16,
+justifyContent: "center",
+alignItems: 'center'
   }
 });
 
