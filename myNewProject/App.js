@@ -5,7 +5,8 @@ import {
   View,
   Text,
   ImageBackground,
-  TextInput
+  TextInput, 
+  Button
 } from "react-native";
 
 export default function App() {
@@ -14,9 +15,16 @@ export default function App() {
       <View style={styles.container}>
         <ImageBackground style={styles.image}
         source={require('./images/photoGround.jpg')}>
-          <View style={styles.menu}>
-          <TextInput style={styles.input} textAlign={'center'}/>
-        <Text style={styles.text}>Start work</Text>
+         
+         <View style={styles.menu}>
+          <Text style={styles.text}> Registration</Text>
+         <View style={styles.form}>
+         <TextInput style={styles.input} textAlign={'left'}/>
+          <TextInput style={styles.input} textAlign={'left'}/>
+          <TextInput style={styles.input} textAlign={'left'} secureTextEntry={true}/>
+         </View>
+          
+        
           </View>
         
         </ImageBackground>
@@ -41,27 +49,42 @@ const styles = StyleSheet.create({
     
     
   },
-  menu: {
-    backgroundColor: '#fff',
-    borderColor: 'green',
+  input: {
     borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: "flex-end",
-    borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
+    height: 50,
+borderRadius: 8,
+backgroundColor: '#F6F6F6',
+borderColor: '#E8E8E8',
+marginHorizontal: 16,
+marginBottom: 16,
+paddingLeft: 16,
+  },
+  menu: {
+    
+    backgroundColor: '#FFFFFF',
+    borderColor: 'green',
+   
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
   },
 
-  input: {
-borderWidth: 1,
-marginHorizontal: 50,
-height: 40,
-borderRadius: 15,
-borderColor: 'red'
-  }, 
+//   input: {
+//     flex: 1,
+// borderWidth: 1,
+// marginHorizontal: 50,
+// height: 50,
+// borderRadius: 8,
+// backgroundColor: '#F6F6F6',
+// borderColor: '#E8E8E8'
+//   }, 
   text: {
-    color: "black",
-    fontSize: 45,
+    color: "#212121",
+    fontFamily: 'Roboto',
+    fontSize: 30,
     textAlign: 'center',
+    marginBottom: 32,
+    marginTop: 90,
+    
   }
 });
 
