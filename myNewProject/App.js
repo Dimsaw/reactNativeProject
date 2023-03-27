@@ -1,5 +1,7 @@
 
-import React from "react";
+import React, {useState} from "react";
+// import * as Font from 'expo-font';
+// import { AppLoading } from 'expo';
 import {
   StyleSheet,
   View,
@@ -8,35 +10,56 @@ import {
   TextInput, 
   TouchableOpacity, 
   Platform, 
+  Keyboard,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback
 } from "react-native";
 
-export default function App() {
+// const loadFonts = async () => {
+//   await Font.loadAsync({
+//     "Roboto-Regular": require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
+//     "Roboto-Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
+//   });
+// };
 
+export default function App() {
+const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+const touchSreen = () => {
+  setIsShowKeyboard(false);
+  Keyboard.dismiss();
+
+}
   return (
+    <TouchableWithoutFeedback onPress={touchSreen }>
       <View style={styles.container}>
         <ImageBackground style={styles.image}
         source={require('./images/photoGround.jpg')}>
+         <KeyboardAvoidingView 
+         behavior={Platform.OS == "ios" ? "padding" : 0}>
+         <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -70 : 0}}>
         
-         <View style={styles.menu}>
           <Text style={styles.text}> Registration</Text>
          <View style={styles.form}>
-         <TextInput style={styles.input} textAlign={'left'}/>
-          <TextInput style={styles.input} textAlign={'left'}/>
-          <TextInput style={styles.input} textAlign={'left'} secureTextEntry={true}/>
-          <TouchableOpacity activeOpacity={0.5} behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.btn}>
+         <TextInput style={styles.input} textAlign={'left'} onFocus={() => setIsShowKeyboard(true)}/>
+          <TextInput style={styles.input} textAlign={'left'} onFocus={() => setIsShowKeyboard(true)}/>
+          <TextInput style={styles.input} textAlign={'left'} secureTextEntry={true} onFocus={() => setIsShowKeyboard(true)}/>
+         
+         </View>
+
+         <TouchableOpacity activeOpacity={0.5} style={styles.btn}>
             <Text style={styles.btnText}>Sign in</Text>
           </TouchableOpacity>
-         </View>
-     
-         
-          
         
           </View>
+          </KeyboardAvoidingView>
+          
         
         </ImageBackground>
         
         
       </View>
+      </TouchableWithoutFeedback>
   );
 }
 
@@ -55,6 +78,19 @@ const styles = StyleSheet.create({
     
     
   },
+
+  menu: {
+    
+    backgroundColor: '#FFFFFF',
+    borderColor: 'green',
+   
+    borderTopRightRadius: 25,
+    borderTopLeftRadius: 25,
+    // marginBottom: -50,
+  
+
+  },
+
   input: {
     borderWidth: 1,
     height: 50,
@@ -65,18 +101,10 @@ marginHorizontal: 16,
 marginBottom: 16,
 paddingLeft: 16,
   },
-  menu: {
-    
-    backgroundColor: '#FFFFFF',
-    borderColor: 'green',
-   
-    borderTopRightRadius: 25,
-    borderTopLeftRadius: 25,
-  },
+  
 
   text: {
     color: "#212121",
-    // fontFamily: 'Roboto',
     fontSize: 30,
     textAlign: 'center',
     marginBottom: 32,
@@ -88,10 +116,10 @@ paddingLeft: 16,
     height: 50,
 borderRadius: 100,
 backgroundColor: '#FF6C00',
-borderColor: "#ffffff",
+borderColor: "#ffffff", 
 marginHorizontal: 16,
 marginTop: 27,
-marginBottom: 16,
+marginBottom: 16,                          
 paddingLeft: 16,
 justifyContent: "center",
 alignItems: 'center'
