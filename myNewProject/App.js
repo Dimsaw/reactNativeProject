@@ -6,7 +6,8 @@ import {
   Text,
   ImageBackground,
   TextInput, 
-  TouchableOpacity
+  TouchableOpacity, 
+  Platform, 
 } from "react-native";
 
 export default function App() {
@@ -15,17 +16,19 @@ export default function App() {
       <View style={styles.container}>
         <ImageBackground style={styles.image}
         source={require('./images/photoGround.jpg')}>
-         
+        
          <View style={styles.menu}>
           <Text style={styles.text}> Registration</Text>
          <View style={styles.form}>
          <TextInput style={styles.input} textAlign={'left'}/>
           <TextInput style={styles.input} textAlign={'left'}/>
           <TextInput style={styles.input} textAlign={'left'} secureTextEntry={true}/>
-          <TouchableOpacity style={styles.btn}>
-            <Text>Sign in</Text>
+          <TouchableOpacity activeOpacity={0.5} behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.btn}>
+            <Text style={styles.btnText}>Sign in</Text>
           </TouchableOpacity>
          </View>
+     
+         
           
         
           </View>
@@ -92,6 +95,10 @@ marginBottom: 16,
 paddingLeft: 16,
 justifyContent: "center",
 alignItems: 'center'
+  },
+  btnText: {
+color: '#FFFFFF',
+fontSize: 16,
   }
 });
 
