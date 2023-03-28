@@ -22,13 +22,26 @@ import {
 //   });
 // };
 
+const initialState = {
+  login: '',
+  email: '',
+  password: ''
+}
+
 export default function App() {
 const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+const [state, setState] = useState(initialState);
+
 
 const touchSreen = () => {
   setIsShowKeyboard(false);
   Keyboard.dismiss();
 
+}
+
+const submitForm = () => {
+  console.log(state);
+  setState(initialState);
 }
   return (
     <TouchableWithoutFeedback onPress={touchSreen }>
@@ -41,13 +54,22 @@ const touchSreen = () => {
         
           <Text style={styles.text}> Registration</Text>
          <View style={styles.form}>
-         <TextInput style={styles.input} textAlign={'left'} onFocus={() => setIsShowKeyboard(true)}/>
-          <TextInput style={styles.input} textAlign={'left'} onFocus={() => setIsShowKeyboard(true)}/>
-          <TextInput style={styles.input} textAlign={'left'} secureTextEntry={true} onFocus={() => setIsShowKeyboard(true)}/>
+         <TextInput style={styles.input} textAlign={'left'} 
+          value={state.login} placeholder="Login" 
+          onFocus={() => setIsShowKeyboard(true)}
+          onChangeText={(value) => setState((prevState) => ({...prevState, login: value}))}/>
+          <TextInput style={styles.input} textAlign={'left'}  
+          value={state.email} placeholder="Email" 
+          onFocus={() => setIsShowKeyboard(true)}
+          onChangeText={(value) => setState((prevState) => ({...prevState, email: value}))}/>
+          <TextInput style={styles.input} textAlign={'left'}  
+          value={state.password} placeholder="Passwordr" secureTextEntry={true} 
+          onFocus={() => setIsShowKeyboard(true)}
+          onChangeText={(value) => setState((prevState) => ({...prevState, password: value}))}/>
          
          </View>
 
-         <TouchableOpacity activeOpacity={0.5} style={styles.btn}>
+         <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={submitForm}>
             <Text style={styles.btnText}>Sign in</Text>
           </TouchableOpacity>
         
