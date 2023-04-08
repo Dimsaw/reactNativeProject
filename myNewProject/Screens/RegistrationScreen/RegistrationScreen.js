@@ -62,8 +62,8 @@ const submitForm = () => {
 }
 
 const [fontsLoaded] = useFonts({
-  'Roboto-Medium': require('./fonts/Roboto-Medium.ttf'),
-  "Roboto-Regular": require('./fonts/Roboto-Regular.ttf')
+  'Roboto-Medium': require('../../fonts/Roboto-Medium.ttf'),
+  "Roboto-Regular": require('../../fonts/Roboto-Regular.ttf')
 });
 
 const onLayoutRootView = useCallback(async () => {
@@ -79,7 +79,7 @@ if (!fontsLoaded) {
     <TouchableWithoutFeedback onPress={touchSreen }>
       <View style={styles.container} onLayout={onLayoutRootView}>
         <ImageBackground style={styles.image}
-        source={require('./images/photoGround.jpg')}>
+        source={require('../../images/photoGround.jpg')}>
          <KeyboardAvoidingView 
          behavior={Platform.OS == "ios" ? "padding" : 0}>
          <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -70 : 0}}>
@@ -105,6 +105,8 @@ if (!fontsLoaded) {
          <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={submitForm}>
             <Text style={styles.btnText}>Sign in</Text>
           </TouchableOpacity>
+
+          <Text style={ styles.link}> Already have an account? Come in</Text>
         
           </View>
           </KeyboardAvoidingView>
@@ -184,6 +186,13 @@ alignItems: 'center'
   btnText: {
 color: '#FFFFFF',
 fontSize: 16,
+  },
+  link: {
+    color: "#1B4371",
+    textAlign: 'center',
+    fontSize: 16,
+    paddingBottom: 79
+    
   }
 });
 
