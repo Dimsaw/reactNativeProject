@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useCallback } from 'react';
 
 import { useFonts } from 'expo-font';
@@ -9,9 +9,9 @@ import {
   View,
   Text,
   ImageBackground,
-  TextInput, 
-  TouchableOpacity, 
-  Platform, 
+  TextInput,
+  TouchableOpacity,
+  Platform,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
@@ -38,85 +38,86 @@ export default function Registration() {
   useEffect(() => {
     const subscription = Dimensions.addEventListener(
       'change',
-      ({window, screen}) => {
-        setDimensions({window, screen});
+      ({ window, screen }) => {
+        setDimensions({ window, screen });
       },
     );
     return () => subscription?.remove();
   });
 
 
-const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-const [state, setState] = useState(initialState);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
 
 
-const touchSreen = () => {
-  setIsShowKeyboard(false);
-  Keyboard.dismiss();
+  const touchSreen = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
 
-}
-
-const submitForm = () => {
-  console.log(state);
-  setState(initialState);
-}
-
-const [fontsLoaded] = useFonts({
-  'Roboto-Medium': require('../../fonts/Roboto-Medium.ttf'),
-  "Roboto-Regular": require('../../fonts/Roboto-Regular.ttf')
-});
-
-const onLayoutRootView = useCallback(async () => {
-  if (fontsLoaded) {
-    await SplashScreen.hideAsync();
   }
-}, [fontsLoaded]);
 
-if (!fontsLoaded) {
-  return null;
-}
+  const submitForm = () => {
+    console.log(state);
+    setState(initialState);
+  }
+
+  const [fontsLoaded] = useFonts({
+    'Roboto-Medium': require('../../fonts/Roboto-Medium.ttf'),
+    "Roboto-Regular": require('../../fonts/Roboto-Regular.ttf')
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
-    <TouchableWithoutFeedback onPress={touchSreen }>
+    <TouchableWithoutFeedback onPress={touchSreen}>
       <View style={styles.container} onLayout={onLayoutRootView}>
         <ImageBackground style={styles.image}
-        source={require('../../images/photoGround.jpg')}>
-         <KeyboardAvoidingView 
-         behavior={Platform.OS == "ios" ? "padding" : 0}>
-         <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -70 : 0}}>
-        
-          <Text style={  styles.text}> Registration</Text>
-         <View style={styles.form}>
-         <TextInput style={styles.input} textAlign={'left'} 
-          value={state.login} placeholder="Login" 
-          onFocus={() => setIsShowKeyboard(true)}
-          onChangeText={(value) => setState((prevState) => ({...prevState, login: value}))}/>
-          <TextInput style={styles.input} textAlign={'left'}  
-          value={state.email} placeholder="Email" 
-          onFocus={() => setIsShowKeyboard(true)}
-          onChangeText={(value) => setState((prevState) => 
-          ({...prevState, email: value}))}/>
-          <TextInput style={styles.input} textAlign={'left'}  
-          value={state.password} placeholder="Passwordr" secureTextEntry={true} 
-          onFocus={() => setIsShowKeyboard(true)}
-          onChangeText={(value) => setState((prevState) => ({...prevState, password: value}))}/>
-         
-         </View>
+          source={require('../../images/photoGround.jpg')}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : 0}>
+            <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -70 : 0 }}>
 
-         <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={submitForm}>
-            <Text style={styles.btnText}>Sign in</Text>
-          </TouchableOpacity>
+              <Text style={styles.text}> Registration</Text>
+              <View style={styles.form}>
 
-          <Text style={ styles.link}> Already have an account? Come in</Text>
-        
-          </View>
+                <TextInput style={styles.input} textAlign={'left'}
+                  value={state.login} placeholder="Login"
+                  onFocus={() => setIsShowKeyboard(true)}
+                  onChangeText={(value) => setState((prevState) => ({ ...prevState, login: value }))} />
+                <TextInput style={styles.input} textAlign={'left'}
+                  value={state.email} placeholder="Email"
+                  onFocus={() => setIsShowKeyboard(true)}
+                  onChangeText={(value) => setState((prevState) =>
+                    ({ ...prevState, email: value }))} />
+                <TextInput style={styles.input} textAlign={'left'}
+                  value={state.password} placeholder="Password" secureTextEntry={true}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  onChangeText={(value) => setState((prevState) => ({ ...prevState, password: value }))} />
+
+              </View>
+
+              <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={submitForm}>
+                <Text style={styles.btnText}>Sign in</Text>
+              </TouchableOpacity>
+
+              <Text style={styles.link}> Already have an account? Come in</Text>
+
+            </View>
           </KeyboardAvoidingView>
-          
-        
+
+
         </ImageBackground>
-        
-        
+
+
       </View>
-      </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -133,33 +134,33 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
     // alignItems: 'center'
-    
-    
+
+
   },
 
   menu: {
-    
+
     backgroundColor: '#FFFFFF',
     borderColor: 'green',
-   
+
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     // marginBottom: -50,
-  
+
 
   },
 
   input: {
     borderWidth: 1,
     height: 50,
-borderRadius: 8,
-backgroundColor: '#F6F6F6',
-borderColor: '#E8E8E8',
-marginHorizontal: 16,
-marginBottom: 16,
-paddingLeft: 16,
+    borderRadius: 8,
+    backgroundColor: '#F6F6F6',
+    borderColor: '#E8E8E8',
+    marginHorizontal: 16,
+    marginBottom: 16,
+    paddingLeft: 16,
   },
-  
+
 
   text: {
     color: "#212121",
@@ -168,31 +169,31 @@ paddingLeft: 16,
     marginBottom: 32,
     marginTop: 90,
     fontFamily: 'Roboto-Medium'
-    
+
   },
   btn: {
     borderWidth: 1,
     height: 50,
-borderRadius: 100,
-backgroundColor: '#FF6C00',
-borderColor: "#ffffff", 
-marginHorizontal: 16,
-marginTop: 27,
-marginBottom: 16,                          
-paddingLeft: 16,
-justifyContent: "center",
-alignItems: 'center'
+    borderRadius: 100,
+    backgroundColor: '#FF6C00',
+    borderColor: "#ffffff",
+    marginHorizontal: 16,
+    marginTop: 27,
+    marginBottom: 16,
+    paddingLeft: 16,
+    justifyContent: "center",
+    alignItems: 'center'
   },
   btnText: {
-color: '#FFFFFF',
-fontSize: 16,
+    color: '#FFFFFF',
+    fontSize: 16,
   },
   link: {
     color: "#1B4371",
     textAlign: 'center',
     fontSize: 16,
     paddingBottom: 79
-    
+
   }
 });
 
