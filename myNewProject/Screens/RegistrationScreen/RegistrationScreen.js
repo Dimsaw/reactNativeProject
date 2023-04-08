@@ -82,7 +82,7 @@ export default function Registration() {
           source={require('../../images/photoGround.jpg')}>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : 0}>
-            <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -70 : 0 }}>
+            <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -170 : 0 }}>
 
               <Text style={styles.text}> Registration</Text>
               <View style={styles.form}>
