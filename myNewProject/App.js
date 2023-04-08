@@ -1,7 +1,9 @@
+import React, {useState, useEffect} from "react";
+import { useCallback } from 'react';
 
-import React, {useState} from "react";
-// import * as Font from 'expo-font';
-// import { AppLoading } from 'expo';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+
 import {
   StyleSheet,
   View,
@@ -12,15 +14,10 @@ import {
   Platform, 
   Keyboard,
   KeyboardAvoidingView,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Dimensions
 } from "react-native";
 
-// const loadFonts = async () => {
-//   await Font.loadAsync({
-//     "Roboto-Regular": require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
-//     "Roboto-Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
-//   });
-// };
 
 const initialState = {
   login: '',
@@ -28,7 +25,27 @@ const initialState = {
   password: ''
 }
 
+const windowDimensions = Dimensions.get('window');
+const screenDimensions = Dimensions.get('screen');
+
 export default function App() {
+
+  const [dimensions, setDimensions] = useState({
+    window: windowDimensions,
+    screen: screenDimensions,
+  });
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener(
+      'change',
+      ({window, screen}) => {
+        setDimensions({window, screen});
+      },
+    );
+    return () => subscription?.remove();
+  });
+
+
 const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 const [state, setState] = useState(initialState);
 
@@ -43,16 +60,31 @@ const submitForm = () => {
   console.log(state);
   setState(initialState);
 }
+
+const [fontsLoaded] = useFonts({
+  'Roboto-Medium': require('./fonts/Roboto-Medium.ttf'),
+  "Roboto-Regular": require('./fonts/Roboto-Regular.ttf')
+});
+
+const onLayoutRootView = useCallback(async () => {
+  if (fontsLoaded) {
+    await SplashScreen.hideAsync();
+  }
+}, [fontsLoaded]);
+
+if (!fontsLoaded) {
+  return null;
+}
   return (
     <TouchableWithoutFeedback onPress={touchSreen }>
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={onLayoutRootView}>
         <ImageBackground style={styles.image}
         source={require('./images/photoGround.jpg')}>
          <KeyboardAvoidingView 
          behavior={Platform.OS == "ios" ? "padding" : 0}>
          <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -70 : 0}}>
         
-          <Text style={styles.text}> Registration</Text>
+          <Text style={  styles.text}> Registration</Text>
          <View style={styles.form}>
          <TextInput style={styles.input} textAlign={'left'} 
           value={state.login} placeholder="Login" 
@@ -61,7 +93,8 @@ const submitForm = () => {
           <TextInput style={styles.input} textAlign={'left'}  
           value={state.email} placeholder="Email" 
           onFocus={() => setIsShowKeyboard(true)}
-          onChangeText={(value) => setState((prevState) => ({...prevState, email: value}))}/>
+          onChangeText={(value) => setState((prevState) => 
+          ({...prevState, email: value}))}/>
           <TextInput style={styles.input} textAlign={'left'}  
           value={state.password} placeholder="Passwordr" secureTextEntry={true} 
           onFocus={() => setIsShowKeyboard(true)}
@@ -89,6 +122,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    fontFamily: 'Roboto-Regular'
 
 
   },
@@ -131,6 +165,7 @@ paddingLeft: 16,
     textAlign: 'center',
     marginBottom: 32,
     marginTop: 90,
+    fontFamily: 'Roboto-Medium'
     
   },
   btn: {
