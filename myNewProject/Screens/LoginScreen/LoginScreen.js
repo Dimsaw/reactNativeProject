@@ -90,7 +90,7 @@ export default function Login({ navigation }) {
                   }
                 />
               </View>
-
+              <View style={styles.boxBtn}>
               <TouchableOpacity
                 activeOpacity={0.5}
                 style={styles.btn}
@@ -98,14 +98,13 @@ export default function Login({ navigation }) {
               >
                 <Text style={styles.btnText}>Sign in</Text>
               </TouchableOpacity>
-              <TouchableOpacity  onPress={() => navigation.navigate("Registration")}>
-             
-             <Text style={styles.link}
-               
-            
-             >No account? Registration</Text>
-         
-           </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Registration")}
+              >
+                <Text style={styles.link}>No account? Registration</Text>
+              </TouchableOpacity>
+              </View>
+
              
             </View>
           </KeyboardAvoidingView>
@@ -171,10 +170,14 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
+  boxBtn: {
+    paddingBottom: 145,
+  }
+  ,
   link: {
     color: "#1B4371",
     textAlign: "center",
     fontSize: 16,
-    paddingBottom: 145,
+    
   },
 });

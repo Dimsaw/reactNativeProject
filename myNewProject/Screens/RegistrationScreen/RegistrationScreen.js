@@ -101,23 +101,20 @@ export default function Registration({ navigation }) {
                   }
                 />
               </View>
-
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.btn}
-                onPress={submitForm}
-              >
-                <Text style={styles.btnText}>Sign in</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-             
-                <Text style={styles.link}
-                  
-               
-                >Already have an account? Come in</Text>
-            
-              </TouchableOpacity>
-             
+              <View style={styles.boxBtn}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={styles.btn}
+                  onPress={submitForm}
+                >
+                  <Text style={styles.btnText}>Sign in</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                  <Text style={styles.linkText}>
+                    Already have an account? Come in
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
@@ -184,10 +181,12 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
-  link: {
+  boxBtn: {
+    paddingBottom: 79,
+  },
+  linkText: {
     color: "#1B4371",
     textAlign: "center",
     fontSize: 16,
-    paddingBottom: 79,
   },
 });
