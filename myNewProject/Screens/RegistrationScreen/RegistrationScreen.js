@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 import {
   StyleSheet,
   View,
@@ -12,21 +11,20 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  Dimensions
+  Dimensions,
+  Button,
 } from "react-native";
 
-
 const initialState = {
-  login: '',
-  email: '',
-  password: ''
-}
+  login: "",
+  email: "",
+  password: "",
+};
 
-const windowDimensions = Dimensions.get('window');
-const screenDimensions = Dimensions.get('screen');
+const windowDimensions = Dimensions.get("window");
+const screenDimensions = Dimensions.get("screen");
 
-export default function Registration() {
-
+export default function Registration({ navigation }) {
   const [dimensions, setDimensions] = useState({
     window: windowDimensions,
     screen: screenDimensions,
@@ -34,73 +32,95 @@ export default function Registration() {
 
   useEffect(() => {
     const subscription = Dimensions.addEventListener(
-      'change',
+      "change",
       ({ window, screen }) => {
         setDimensions({ window, screen });
-      },
+      }
     );
     return () => subscription?.remove();
   });
 
-
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
-
 
   const touchSreen = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-
-  }
+  };
 
   const submitForm = () => {
     console.log(state);
     setState(initialState);
-  }
-
-
+  };
 
   return (
     <TouchableWithoutFeedback onPress={touchSreen}>
-      <View style={styles.container} >
-        <ImageBackground style={styles.image}
-          source={require('../../images/photoGround.jpg')}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : 0}>
-            <View style={{ ...styles.menu, marginBottom: isShowKeyboard ? -170 : 0 }}>
-
+      <View style={styles.container}>
+        <ImageBackground
+          style={styles.image}
+          source={require("../../images/photoGround.jpg")}
+        >
+          <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : 0}>
+            <View
+              style={{
+                ...styles.menu,
+                marginBottom: isShowKeyboard ? -170 : 0,
+              }}
+            >
               <Text style={styles.text}> Registration</Text>
               <View style={styles.form}>
-
-                <TextInput style={styles.input} textAlign={'left'}
-                  value={state.login} placeholder="Login"
+                <TextInput
+                  style={styles.input}
+                  textAlign={"left"}
+                  value={state.login}
+                  placeholder="Login"
                   onFocus={() => setIsShowKeyboard(true)}
-                  onChangeText={(value) => setState((prevState) => ({ ...prevState, login: value }))} />
-                <TextInput style={styles.input} textAlign={'left'}
-                  value={state.email} placeholder="Email"
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, login: value }))
+                  }
+                />
+                <TextInput
+                  style={styles.input}
+                  textAlign={"left"}
+                  value={state.email}
+                  placeholder="Email"
                   onFocus={() => setIsShowKeyboard(true)}
-                  onChangeText={(value) => setState((prevState) =>
-                    ({ ...prevState, email: value }))} />
-                <TextInput style={styles.input} textAlign={'left'}
-                  value={state.password} placeholder="Password" secureTextEntry={true}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, email: value }))
+                  }
+                />
+                <TextInput
+                  style={styles.input}
+                  textAlign={"left"}
+                  value={state.password}
+                  placeholder="Password"
+                  secureTextEntry={true}
                   onFocus={() => setIsShowKeyboard(true)}
-                  onChangeText={(value) => setState((prevState) => ({ ...prevState, password: value }))} />
-
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, password: value }))
+                  }
+                />
               </View>
 
-              <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={submitForm}>
+              <TouchableOpacity
+                activeOpacity={0.5}
+                style={styles.btn}
+                onPress={submitForm}
+              >
                 <Text style={styles.btnText}>Sign in</Text>
               </TouchableOpacity>
-
-              <Text style={styles.link}> Already have an account? Come in</Text>
-
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+             
+                <Text style={styles.link}
+                  
+               
+                >Already have an account? Come in</Text>
+            
+              </TouchableOpacity>
+             
             </View>
           </KeyboardAvoidingView>
-
-
         </ImageBackground>
-
-
       </View>
     </TouchableWithoutFeedback>
   );
@@ -110,75 +130,64 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    fontFamily: 'Roboto-Regular'
-
-
+    fontFamily: "Roboto-Regular",
   },
   image: {
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
     // alignItems: 'center'
-
-
   },
 
   menu: {
-
-    backgroundColor: '#FFFFFF',
-    borderColor: 'green',
+    backgroundColor: "#FFFFFF",
+    borderColor: "green",
 
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     // marginBottom: -50,
-
-
   },
 
   input: {
     borderWidth: 1,
     height: 50,
     borderRadius: 8,
-    backgroundColor: '#F6F6F6',
-    borderColor: '#E8E8E8',
+    backgroundColor: "#F6F6F6",
+    borderColor: "#E8E8E8",
     marginHorizontal: 16,
     marginBottom: 16,
     paddingLeft: 16,
   },
 
-
   text: {
     color: "#212121",
     fontSize: 30,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 32,
     marginTop: 90,
-    fontFamily: 'Roboto-Medium'
-
+    fontFamily: "Roboto-Medium",
   },
   btn: {
     borderWidth: 1,
     height: 50,
     borderRadius: 100,
-    backgroundColor: '#FF6C00',
+    backgroundColor: "#FF6C00",
     borderColor: "#ffffff",
     marginHorizontal: 16,
     marginTop: 27,
     marginBottom: 16,
     paddingLeft: 16,
     justifyContent: "center",
-    alignItems: 'center'
+    alignItems: "center",
   },
   btnText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
   },
   link: {
     color: "#1B4371",
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
-    paddingBottom: 79
-
-  }
+    paddingBottom: 79,
+  },
 });
-
