@@ -18,36 +18,33 @@ const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 
 const useRoute = (isAuth) => {
-
   if (!isAuth) {
     return (
-<AuthStack.Navigator initialRouteName="Registration">
-      <AuthStack.Screen
-        name="Login"
-        options={{ headerShown: false }}
-        component={Login}
-
-      />
-      <AuthStack.Screen
-        name="Registration"
-        options={{ headerShown: false }}
-        component={Registration}
-
-      />
-    </AuthStack.Navigator>
-    )
+      <AuthStack.Navigator initialRouteName="Registration">
+        <AuthStack.Screen
+          name="Login"
+          options={{ headerShown: false }}
+          component={Login}
+        />
+        <AuthStack.Screen
+          name="Registration"
+          options={{ headerShown: false }}
+          component={Registration}
+        />
+      </AuthStack.Navigator>
+    );
   }
   return (
-    <MainTab.Navigator> 
-      <MainTab.Screen name="Posts" component={PostsScreen} />
-      <MainTab.Screen name="Create" component={CreatePostsScreen} />
-      <MainTab.Screen name="Profile" component={ProfileScreen} />
-      </MainTab.Navigator>
-  )
-}
+    <MainTab.Navigator>
+      <MainTab.Screen name="Posts" component={PostsScreen} options={{ headerShown: false }}/>
+      <MainTab.Screen name="Create" component={CreatePostsScreen} options={{ headerShown: false }}/>
+      <MainTab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
+    </MainTab.Navigator>
+  );
+};
 
 export default function App() {
-  const routing = useRoute({});
+  const routing = useRoute(null);
   const [fontsLoaded] = useFonts({
     "Roboto-Medium": require("./fonts/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./fonts/Roboto-Regular.ttf"),
@@ -63,13 +60,9 @@ export default function App() {
     return null;
   }
 
-  
-
   return (
-    <NavigationContainer onLayout={onLayoutRootView}>
-     
+    <NavigationContainer >
      {routing}
-     
     </NavigationContainer>
   );
 }
