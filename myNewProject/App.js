@@ -3,18 +3,51 @@ import { useCallback } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import Registration from "./screens/RegistrationScreen/RegistrationScreen";
-import Login from "./screens/LoginScreen/LoginScreen";
+import Registration from "./screens/registrationScreen/RegistrationScreen";
+import Login from "./screens/loginScreen/LoginScreen";
+import PostsScreen from "./screens/mainScreen/postsScreen/PostsScreen";
+import CreatePostsScreen from "./screens/mainScreen/createPostsScreen/CreatePostsScreen";
+import ProfileScreen from "./screens/mainScreen/profileScreen/ProfileScreen";
 
 const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
 
+const useRoute = (isAuth) => {
+
+  if (!isAuth) {
+    return (
+<AuthStack.Navigator initialRouteName="Registration">
+      <AuthStack.Screen
+        name="Login"
+        options={{ headerShown: false }}
+        component={Login}
+
+      />
+      <AuthStack.Screen
+        name="Registration"
+        options={{ headerShown: false }}
+        component={Registration}
+
+      />
+    </AuthStack.Navigator>
+    )
+  }
+  return (
+    <MainTab.Navigator> 
+      <MainTab.Screen name="Posts" component={PostsScreen} />
+      <MainTab.Screen name="Create" component={CreatePostsScreen} />
+      <MainTab.Screen name="Profile" component={ProfileScreen} />
+      </MainTab.Navigator>
+  )
+}
+
 export default function App() {
+  const routing = useRoute({});
   const [fontsLoaded] = useFonts({
     "Roboto-Medium": require("./fonts/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./fonts/Roboto-Regular.ttf"),
@@ -30,22 +63,13 @@ export default function App() {
     return null;
   }
 
+  
+
   return (
-    <NavigationContainer>
-      <AuthStack.Navigator initialRouteName="Registration">
-        <AuthStack.Screen
-          name="Login"
-          options={{ headerShown: false }}
-          component={Login}
-          onLayout={onLayoutRootView}
-        />
-        <AuthStack.Screen
-          name="Registration"
-          options={{ headerShown: false }}
-          component={Registration}
-          onLayout={onLayoutRootView}
-        />
-      </AuthStack.Navigator>
+    <NavigationContainer onLayout={onLayoutRootView}>
+     
+     {routing}
+     
     </NavigationContainer>
   );
 }
