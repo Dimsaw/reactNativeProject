@@ -1,15 +1,18 @@
 import React from "react";
 import { useCallback } from "react";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import Registration from "./Screens/RegistrationScreen/RegistrationScreen";
-import Login from "./Screens/LoginScreen/LoginScreen";
+import Registration from "./screens/RegistrationScreen/RegistrationScreen";
+import Login from "./screens/LoginScreen/LoginScreen";
 
-const Stack = createNativeStackNavigator();
+const AuthStack = createNativeStackNavigator();
+const MainTab = createBottomTabNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -29,20 +32,20 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Registration">
-        <Stack.Screen
+      <AuthStack.Navigator initialRouteName="Registration">
+        <AuthStack.Screen
           name="Login"
           options={{ headerShown: false }}
           component={Login}
           onLayout={onLayoutRootView}
         />
-        <Stack.Screen
+        <AuthStack.Screen
           name="Registration"
           options={{ headerShown: false }}
           component={Registration}
           onLayout={onLayoutRootView}
         />
-      </Stack.Navigator>
+      </AuthStack.Navigator>
     </NavigationContainer>
   );
 }
