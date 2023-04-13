@@ -3,7 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { Button } from "react-native";
+import { TouchableOpacity, Text } from "react-native";
 
 const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -18,6 +18,7 @@ import Home from '../screens/home/Home';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 import { Feather } from "@expo/vector-icons";
 import { Octicons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons'; 
 
 const useRoute = (isAuth) => {
   if (!isAuth) {
@@ -43,48 +44,21 @@ const useRoute = (isAuth) => {
         component={Home}
         options={{ 
             headerStyle: {
-                backgroundColor: '#f4511e',
+                backgroundColor: '#fff',
               },
               headerTitle: 'Publication',
               headerTitleAlign: 'center',
+              
               headerRight: () => (
-                <Button
+                <TouchableOpacity
                   onPress={() => alert("This is a button!")}
-                  title="Press me"
-                  color="#fff"
-              />  ),
+              >
+                <Ionicons name="exit-outline" size={24} color="black" />
+                 </TouchableOpacity> ),
             tabBarIcon: ({focused, size, color}) => (
                 <SimpleLineIcons name="grid" size={size} color={color} />)}}
       />
-        {/* <MainTab.Screen
-        name="Home"
-        component={Home}
-        options={{
-            title: "Home screen",
-            headerStyle: {
-                backgroundColor: red,
-            },
-            headerTintColor: "#fff",
-            headerTitleStyle: {
-              fontWeight: "bold",
-              fontSize: 20,
-            },
-            headerRight: () => (
-              <Button
-                onPress={() => alert("This is a button!")}
-                title="Press me"
-                color="#fff"
-              />
-            ),
-
-            }}
-      /> */}
-      {/* <MainTab.Screen
-        name="Posts"
-        component={PostsScreen}
-       
-        
-      /> */}
+      
       <MainTab.Screen
         name="Create"
         component={CreatePostsScreen}
