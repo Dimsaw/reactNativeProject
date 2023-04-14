@@ -3,7 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
 const AuthStack = createNativeStackNavigator();
 const MainTab = createBottomTabNavigator();
@@ -38,7 +38,7 @@ const useRoute = (isAuth) => {
     );
   }
   return (
-    <MainTab.Navigator tabBarOptions={{ showLabel: false }}>
+    <MainTab.Navigator tabBarOptions={{ showLabel: false, }}>
         <MainTab.Screen
         name="Home"
         component={Home}
@@ -50,11 +50,17 @@ const useRoute = (isAuth) => {
               headerTitleAlign: 'center',
               
               headerRight: () => (
-                <TouchableOpacity
+                <TouchableOpacity style={styles.exit}
                   onPress={() => alert("This is a button!")}
               >
                 <Ionicons name="exit-outline" size={24} color="black" />
                  </TouchableOpacity> ),
+                 tabBarStyle: [
+                    {
+                      display: "flex"
+                    },
+                    null
+                  ],
             tabBarIcon: ({focused, size, color}) => (
                 <SimpleLineIcons name="grid" size={size} color={color} />)}}
       />
@@ -63,6 +69,12 @@ const useRoute = (isAuth) => {
         name="Create"
         component={CreatePostsScreen}
         options={{ headerShown: false,
+            tabBarStyle: [
+                {
+                  display: "flex"
+                },
+                null
+              ],
         tabBarIcon: ({focused, size, color}) => (
             <Feather name="plus" size={size} color={color} /> 
         ) }}
@@ -71,6 +83,12 @@ const useRoute = (isAuth) => {
         name="Profile"
         component={ProfileScreen}
         options={{ headerShown: false,
+            tabBarStyle: [
+                {
+                  display: "flex"
+                },
+                null
+              ],
             tabBarIcon: ({focused, size, color}) => (
                 <Octicons name="person" size={size} color={color} /> )}}
       />
@@ -79,3 +97,9 @@ const useRoute = (isAuth) => {
 };
 
 export default useRoute;
+
+
+const styles = StyleSheet.create({
+    exit: {
+   paddingRight: 16},
+})

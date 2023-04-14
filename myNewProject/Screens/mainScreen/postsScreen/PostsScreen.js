@@ -4,9 +4,9 @@ import { View, Text, StyleSheet } from "react-native";
 const PostsScreen = () => {
   return (
     <View style={styles.container}>
-    <Text>PostsScreen</Text>
-  </View>
-  )
+      <Text>PostsScreen</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "red",
   },
 });
 
