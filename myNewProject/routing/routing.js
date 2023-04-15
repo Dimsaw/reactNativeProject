@@ -13,12 +13,13 @@ import Login from "../screens/loginScreen/LoginScreen";
 import PostsScreen from "../screens/mainScreen/postsScreen/PostsScreen";
 import CreatePostsScreen from "../screens/mainScreen/createPostsScreen/CreatePostsScreen";
 import ProfileScreen from "../screens/mainScreen/profileScreen/ProfileScreen";
-import Home from '../screens/home/Home';
+// import Home from '../screens/home/Home';
 
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 import { Feather } from "@expo/vector-icons";
 import { Octicons } from '@expo/vector-icons'; 
 import { Ionicons } from '@expo/vector-icons'; 
+import { AntDesign } from '@expo/vector-icons';
 
 const useRoute = (isAuth) => {
   if (!isAuth) {
@@ -40,13 +41,13 @@ const useRoute = (isAuth) => {
   return (
     <MainTab.Navigator tabBarOptions={{ showLabel: false, }}>
         <MainTab.Screen
-        name="Home"
-        component={Home}
+        name="PostsScreen"
+        component={PostsScreen}
         options={{ 
             headerStyle: {
                 backgroundColor: '#fff',
               },
-              headerTitle: 'Publication',
+              headerTitle: 'Post',
               headerTitleAlign: 'center',
               
               headerRight: () => (
@@ -55,12 +56,7 @@ const useRoute = (isAuth) => {
               >
                 <Ionicons name="exit-outline" size={24} color="black" />
                  </TouchableOpacity> ),
-                 tabBarStyle: [
-                    {
-                      display: "flex"
-                    },
-                    null
-                  ],
+                 
             tabBarIcon: ({focused, size, color}) => (
                 <SimpleLineIcons name="grid" size={size} color={color} />)}}
       />
@@ -68,13 +64,16 @@ const useRoute = (isAuth) => {
       <MainTab.Screen
         name="Create"
         component={CreatePostsScreen}
-        options={{ headerShown: false,
-            tabBarStyle: [
-                {
-                  display: "flex"
-                },
-                null
-              ],
+        options={{ 
+            headerTitle: 'Create a post',
+              headerTitleAlign: 'center',
+              headerLeft: () => (
+                <TouchableOpacity style={styles.backBtn}
+                  onPress={() => alert("This is a button!")}
+              >
+                <AntDesign name="arrowleft" size={24} color="black" />
+                 </TouchableOpacity> ),
+            
         tabBarIcon: ({focused, size, color}) => (
             <Feather name="plus" size={size} color={color} /> 
         ) }}
@@ -83,12 +82,6 @@ const useRoute = (isAuth) => {
         name="Profile"
         component={ProfileScreen}
         options={{ headerShown: false,
-            tabBarStyle: [
-                {
-                  display: "flex"
-                },
-                null
-              ],
             tabBarIcon: ({focused, size, color}) => (
                 <Octicons name="person" size={size} color={color} /> )}}
       />
@@ -102,4 +95,7 @@ export default useRoute;
 const styles = StyleSheet.create({
     exit: {
    paddingRight: 16},
+   backBtn: {
+    paddingLeft: 16
+   }
 })

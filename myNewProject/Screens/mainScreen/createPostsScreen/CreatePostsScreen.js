@@ -1,21 +1,31 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 
 const CreatePostsScreen = () => {
   return (
-    <View style={styles.container}>
-      <Text>CreatePostsScreen</Text>
+    <View>
+      <TextInput
+        style={styles.input}
+        textAlign={"left"}
+        value={state.login}
+        placeholder="Login"
+        onFocus={() => setIsShowKeyboard(true)}
+        onChangeText={(value) =>
+          setState((prevState) => ({ ...prevState, login: value }))
+        }
+      />
+      <TextInput
+        style={styles.input}
+        textAlign={"left"}
+        value={state.email}
+        placeholder="Email"
+        onFocus={() => setIsShowKeyboard(true)}
+        onChangeText={(value) =>
+          setState((prevState) => ({ ...prevState, email: value }))
+        }
+      />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-  },
-});
 
 export default CreatePostsScreen;

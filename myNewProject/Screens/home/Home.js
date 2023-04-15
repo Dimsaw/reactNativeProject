@@ -30,7 +30,9 @@ const styles = StyleSheet.create({
   athorInfo: {
     flex: 1,
     marginLeft: 8,
-    marginTop: 32,
+    marginTop: 50,
+   
+
    
   },
   avatar: {
