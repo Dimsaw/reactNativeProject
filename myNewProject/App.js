@@ -1,5 +1,5 @@
 import React from "react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
 import useRoute from "./routing/routing";
@@ -9,7 +9,6 @@ import * as SplashScreen from "expo-splash-screen";
 
 
 export default function App() {
-  const routing = useRoute({});
   const [fontsLoaded] = useFonts({
     "Roboto-Medium": require("./fonts/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./fonts/Roboto-Regular.ttf"),
@@ -27,7 +26,7 @@ export default function App() {
 
   return (
     <NavigationContainer onLayout={onLayoutRootView}>
-     {routing}
+      <Navigation />
     </NavigationContainer>
   );
 }
