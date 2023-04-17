@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
 const HomeScreen = () => {
+
   return (
     <View style={styles.container}>
       <Image
@@ -23,17 +24,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: 16,
     paddingRight: 16,
-   
-    
-   
+
+
+
   },
   athorInfo: {
     flex: 1,
     marginLeft: 8,
     marginTop: 50,
-   
 
-   
+
+
   },
   avatar: {
     borderRadius: 16,
@@ -57,24 +58,4 @@ export default HomeScreen;
 
 
 
-// import React from "react";
-// import { View, Text, StyleSheet } from "react-native";
 
-// const PostsScreen = () => {
-//   return (
-//     <View style={styles.container}>
-//       <Text>PostsScreen</Text>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "red",
-//   },
-// });
-
-// export default PostsScreen;

@@ -24,6 +24,8 @@ const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
 
 export default function Login({ navigation }) {
+
+
   const [dimensions, setDimensions] = useState({
     window: windowDimensions,
     screen: screenDimensions,
@@ -57,7 +59,7 @@ export default function Login({ navigation }) {
       <View style={styles.container}>
         <ImageBackground
           style={styles.image}
-          source={require("../../images/photoGround.jpg")}
+          source={require("../../../images/photoGround.jpg")}
         >
           <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : 0}>
             <View
@@ -91,21 +93,21 @@ export default function Login({ navigation }) {
                 />
               </View>
               <View style={styles.boxBtn}>
-              <TouchableOpacity
-                activeOpacity={0.5}
-                style={styles.btn}
-                onPress={submitForm}
-              >
-                <Text style={styles.btnText}>Sign in</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate("Registration")}
-              >
-                <Text style={styles.link}>No account? Registration</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={styles.btn}
+                  onPress={submitForm}
+                >
+                  <Text style={styles.btnText}>Sign in</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Registration")}
+                >
+                  <Text style={styles.link}>No account? Registration</Text>
+                </TouchableOpacity>
               </View>
 
-             
+
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
@@ -178,6 +180,7 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     textAlign: "center",
     fontSize: 16,
-    
+
   },
 });
+

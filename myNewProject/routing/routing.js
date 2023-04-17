@@ -1,24 +1,44 @@
 import React from "react";
 
+// import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import Registration from "../screens/authScreen/registrationScreen/RegistrationScreen";
 import Login from "../screens/authScreen/loginScreen/LoginScreen";
 import HomeScreen from "../screens/mainScreen/homeScreen/HomeScreen";
 import CreatePostsScreen from "../screens/mainScreen/createPostsScreen/CreatePostsScreen";
 import ProfileScreen from "../screens/mainScreen/profileScreen/ProfileScreen";
 
-const MainStack = createMainStackNavigator();
+// const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
   return (
-    <MainStack.Navigation initialRouteName="Login">
-      <MainStack.Screen></MainStack.Screen>
-      <MainStack.Screen></MainStack.Screen>
-      <MainStack.Screen></MainStack.Screen>
-      <MainStack.Screen></MainStack.Screen>
-      <MainStack.Screen></MainStack.Screen>
-    </MainStack.Navigation>
-  )
-}
+    <Stack.Navigator
+      initialRouteName="CreatePostsScreen"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="Registration"
+        component={Registration}
+
+      />
+      <Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+      />
+      <Stack.Screen
+        name="CreatePostsScreen"
+        component={CreatePostsScreen}
+      />
+      <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default Navigation;
 
@@ -44,7 +64,6 @@ export default Navigation;
 // import { Octicons } from '@expo/vector-icons';
 // import { Ionicons } from '@expo/vector-icons';
 // import { AntDesign } from '@expo/vector-icons';
-
 
 // const useRoute = (isAuth) => {
 //   if (!isAuth) {
@@ -81,7 +100,6 @@ export default Navigation;
 //             >
 //               <Ionicons name="exit-outline" size={24} color="black" />
 //             </TouchableOpacity>),
-
 
 //           tabBarIcon: ({ focused, size, color }) => (
 //             <SimpleLineIcons name="grid" size={size} color={color} />)
@@ -120,7 +138,6 @@ export default Navigation;
 // };
 
 // export default useRoute;
-
 
 // const styles = StyleSheet.create({
 //   exit: {

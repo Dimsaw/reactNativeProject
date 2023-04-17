@@ -4,6 +4,11 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-nativ
 // import { Ionicons } from "@expo/vector-icons";
 
 const CreatePostsScreen = () => {
+
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={styles.imageBox}></View>
@@ -22,6 +27,7 @@ const CreatePostsScreen = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

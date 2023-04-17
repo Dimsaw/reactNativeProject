@@ -2,7 +2,7 @@ import React from "react";
 import { useCallback, useState } from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
-import useRoute from "./routing/routing";
+import Navigation from "./routing/routing";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";

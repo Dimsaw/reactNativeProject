@@ -54,11 +54,13 @@ export default function Registration({ navigation }) {
   };
 
   return (
+
+
     <TouchableWithoutFeedback onPress={touchSreen}>
       <View style={styles.container}>
         <ImageBackground
           style={styles.image}
-          source={require("../../images/photoGround.jpg")}
+          source={require("../../../images/photoGround.jpg")}
         >
           <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : 0}>
             <View
