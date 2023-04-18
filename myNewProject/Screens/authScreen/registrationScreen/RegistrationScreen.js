@@ -48,10 +48,14 @@ export default function Registration({ navigation }) {
     Keyboard.dismiss();
   };
 
+
   const submitForm = () => {
+    if (!state.email || !state.password) { alert("Please, fill all!") }
     console.log(state);
-    setState(initialState);
+
+    navigation.navigate('Home', { screen: "PostsScreen" })
   };
+
 
   return (
 
