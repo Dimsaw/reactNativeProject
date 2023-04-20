@@ -91,19 +91,13 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginTop: 50,
   },
-  avatar: {
-    borderRadius: 16,
-    width: 60,
-    height: 60,
-    marginTop: 32,
+  exit: {
+    paddingRight: 16,
   },
-  name: {
-    color: "#212121",
-  },
-  email: {
-    color: "#212121",
-    opacity: 0.8,
-  },
+  backBtn: {
+    marginLeft: 16,
+  }
+
 });
 
 export default HomeScreen;
