@@ -7,7 +7,7 @@ import {
   SimpleLineIcons,
   Feather,
   Octicons,
-  Ionicon,
+  Ionicons,
   AntDesign,
 } from "@expo/vector-icons";
 
@@ -34,9 +34,18 @@ const HomeScreen = ({ navigation }) => {
           headerTitle: "Post",
           headerTitleAlign: "center",
 
+          headerRight: () => (
+            <TouchableOpacity
+              style={styles.exit}
+              onPress={() => navigation.navigate("Login")}
+            >
+              <Ionicons name="exit-outline" size={24} color="black" />
+            </TouchableOpacity>
+          ),
 
-
-
+          tabBarIcon: ({ focused, size, color }) => (
+            <SimpleLineIcons name="grid" size={size} color={color} />
+          ),
         }} name='PostsScreen' component={PostsScreen}
       />
       <BottomTabs.Screen
@@ -44,12 +53,13 @@ const HomeScreen = ({ navigation }) => {
           headerTitle: "Create a post",
           headerTitleAlign: "center",
           headerLeft: () => (
-            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('CreatePostsScreen')}>
+            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('PostsScreen')}>
               <AntDesign name="arrowleft" size={24} color="black" />
 
             </TouchableOpacity>
           ),
-
+          tabBarStyle: { display: "none" },
+          tabBarVisible: false,
           tabBarIcon: ({ focused, size, color }) => (
             <Feather name="plus" size={size} color={color} />
           ),
@@ -64,7 +74,8 @@ const HomeScreen = ({ navigation }) => {
         }} name='ProfileScreen' component={ProfileScreen}
       />
     </BottomTabs.Navigator>
-  );
+  )
+
 };
 
 const styles = StyleSheet.create({
@@ -97,58 +108,3 @@ const styles = StyleSheet.create({
 
 export default HomeScreen;
 
-
-// return (
-//   <BottomTabs.Navigator initialRouteName="PostsScreen"
-//     screenOptions={{
-//       tabBarShowLabel: false,
-//     }}
-//   >
-//     <BottomTabs.Screen
-//       options={{
-//         headerStyle: {
-//           backgroundColor: "#fff",
-//         },
-//         headerTitle: "Post",
-//         headerTitleAlign: "center",
-
-//         headerRight: () => (
-//           <TouchableOpacity
-//             style={styles.exit}
-//             onPress={() => navigation.navigate("login")}
-//           >
-//             <Ionicon name="exit-outline" size={24} color="black" />
-//           </TouchableOpacity>
-//         ),
-
-//         tabBarIcon: ({ focused, size, color }) => (
-//           <SimpleLineIcons name="grid" size={size} color={color} />
-//         ),
-//       }} name='PostsScreen' component={PostsScreen}
-//     />
-//     <BottomTabs.Screen
-//       options={{
-//         headerTitle: "Create a post",
-//         headerTitleAlign: "center",
-//         headerLeft: () => (
-//           <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('CreatePostsScreen')}>
-//             <AntDesign name="arrowleft" size={24} color="black" />
-
-//           </TouchableOpacity>
-//         ),
-
-//         tabBarIcon: ({ focused, size, color }) => (
-//           <Feather name="plus" size={size} color={color} />
-//         ),
-//       }} name='CreatePostsScreen' component={CreatePostsScreen}
-//     />
-//     <BottomTabs.Screen
-//       options={{
-//         headerShown: false,
-//         tabBarIcon: ({ focused, size, color }) => (
-//           <Octicons name="person" size={size} color={color} />
-//         ),
-//       }} name='ProfileScreen' component={ProfileScreen}
-//     />
-//   </BottomTabs.Navigator>
-// );

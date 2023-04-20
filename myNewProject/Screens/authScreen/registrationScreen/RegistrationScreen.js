@@ -52,7 +52,7 @@ export default function Registration({ navigation }) {
   const submitForm = () => {
     if (!state.email || !state.password) { return alert("Please, fill all!") }
     console.log(state);
-
+    setState('');
     navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
   };
 

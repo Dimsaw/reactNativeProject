@@ -8,14 +8,7 @@ const PostsScreen = ({ navigation }) => {
         <View style={styles.container}>
             <Text>ProfileScreen</Text>
         </View>
-        // <SafeAreaView style={{ justifyContent: "flex-start", alignItems: "center", overflow: "visible" }}>
-        //     <ScrollView>
-        //         <View style={styles.container}>
-        //             <View style={styles.imageBox}></View>
-        //             <TextInput style={styles.input} textAlign={"left"} placeholder="Name" />
-        //         </View>
-        //     </ScrollView>
-        // </SafeAreaView>
+
     );
 };
 
