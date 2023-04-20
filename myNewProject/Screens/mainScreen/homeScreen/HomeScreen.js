@@ -1,7 +1,7 @@
 import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import {
   SimpleLineIcons,
@@ -11,11 +11,17 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 
+import CreatePostsScreen from '../createPostsScreen/CreatePostsScreen.js';
+import PostsScreen from '../postsScreen/PostsScreen';
+import ProfileScreen from '../profileScreen/ProfileScreen';
+
 const BottomTabs = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
+
+
   return (
-    <BottomTabs.Navigator
+    <BottomTabs.Navigator initialRouteName="PostsScreen"
       screenOptions={{
         tabBarShowLabel: false,
       }}
@@ -28,34 +34,26 @@ const HomeScreen = ({ navigation }) => {
           headerTitle: "Post",
           headerTitleAlign: "center",
 
-          headerRight: ({ }) => (
-            <TouchableOpacity
-              style={styles.exit}
-              onPress={() => navigation.navigate("login")}
-            >
-              <Ionicons name="exit-outline" size={24} color="black" />
-            </TouchableOpacity>
-          ),
 
-          tabBarIcon: ({ focused, size, color }) => (
-            <SimpleLineIcons name="grid" size={size} color={color} />
-          ),
-        }}
+
+
+        }} name='PostsScreen' component={PostsScreen}
       />
       <BottomTabs.Screen
         options={{
           headerTitle: "Create a post",
           headerTitleAlign: "center",
           headerLeft: () => (
-            <TouchableOpacity style={styles.backBtn} onPress={back}>
+            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('CreatePostsScreen')}>
               <AntDesign name="arrowleft" size={24} color="black" />
+
             </TouchableOpacity>
           ),
 
           tabBarIcon: ({ focused, size, color }) => (
             <Feather name="plus" size={size} color={color} />
           ),
-        }}
+        }} name='CreatePostsScreen' component={CreatePostsScreen}
       />
       <BottomTabs.Screen
         options={{
@@ -63,7 +61,7 @@ const HomeScreen = ({ navigation }) => {
           tabBarIcon: ({ focused, size, color }) => (
             <Octicons name="person" size={size} color={color} />
           ),
-        }}
+        }} name='ProfileScreen' component={ProfileScreen}
       />
     </BottomTabs.Navigator>
   );
@@ -98,3 +96,59 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+
+
+// return (
+//   <BottomTabs.Navigator initialRouteName="PostsScreen"
+//     screenOptions={{
+//       tabBarShowLabel: false,
+//     }}
+//   >
+//     <BottomTabs.Screen
+//       options={{
+//         headerStyle: {
+//           backgroundColor: "#fff",
+//         },
+//         headerTitle: "Post",
+//         headerTitleAlign: "center",
+
+//         headerRight: () => (
+//           <TouchableOpacity
+//             style={styles.exit}
+//             onPress={() => navigation.navigate("login")}
+//           >
+//             <Ionicon name="exit-outline" size={24} color="black" />
+//           </TouchableOpacity>
+//         ),
+
+//         tabBarIcon: ({ focused, size, color }) => (
+//           <SimpleLineIcons name="grid" size={size} color={color} />
+//         ),
+//       }} name='PostsScreen' component={PostsScreen}
+//     />
+//     <BottomTabs.Screen
+//       options={{
+//         headerTitle: "Create a post",
+//         headerTitleAlign: "center",
+//         headerLeft: () => (
+//           <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('CreatePostsScreen')}>
+//             <AntDesign name="arrowleft" size={24} color="black" />
+
+//           </TouchableOpacity>
+//         ),
+
+//         tabBarIcon: ({ focused, size, color }) => (
+//           <Feather name="plus" size={size} color={color} />
+//         ),
+//       }} name='CreatePostsScreen' component={CreatePostsScreen}
+//     />
+//     <BottomTabs.Screen
+//       options={{
+//         headerShown: false,
+//         tabBarIcon: ({ focused, size, color }) => (
+//           <Octicons name="person" size={size} color={color} />
+//         ),
+//       }} name='ProfileScreen' component={ProfileScreen}
+//     />
+//   </BottomTabs.Navigator>
+// );

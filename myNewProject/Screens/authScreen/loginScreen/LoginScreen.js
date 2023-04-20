@@ -50,10 +50,9 @@ export default function Login({ navigation }) {
   };
 
   const submitForm = () => {
-    if (!state.email || !state.password) { alert("Please, fill all!") }
-    console.log(state);
+    // if (!state.email || !state.password) { return alert("Please, fill all!") }
 
-    navigation.navigate('Home', { screen: "PostsScreen" })
+    navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
   };
 
   return (

@@ -5,28 +5,32 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-nativ
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const CreatePostsScreen = () => {
-
-
-
-
-
   return (
     <View style={styles.container}>
-      <View style={styles.imageBox}></View>
-      <TextInput style={styles.input} textAlign={"left"} placeholder="Name" />
-      <TextInput
-        style={styles.input}
-        textAlign={"left"}
-        placeholder="Password"
-      />
-      <TouchableOpacity
-        activeOpacity={0.5}
-        style={styles.btn}
-      >
-        <Text style={styles.btnText}>Publish</Text>
-      </TouchableOpacity>
+      <Text>ProfileScreen</Text>
     </View>
-  );
+  )
+
+
+
+
+  // return (
+  //   <View style={styles.container}>
+  //     <View style={styles.imageBox}></View>
+  //     <TextInput style={styles.input} textAlign={"left"} placeholder="Name" />
+  //     <TextInput
+  //       style={styles.input}
+  //       textAlign={"left"}
+  //       placeholder="Password"
+  //     />
+  //     <TouchableOpacity
+  //       activeOpacity={0.5}
+  //       style={styles.btn}
+  //     >
+  //       <Text style={styles.btnText}>Publish</Text>
+  //     </TouchableOpacity>
+  //   </View>
+
 };
 
 
