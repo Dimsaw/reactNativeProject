@@ -11,17 +11,16 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 
-import CreatePostsScreen from '../createPostsScreen/CreatePostsScreen.js';
-import PostsScreen from '../postsScreen/PostsScreen';
-import ProfileScreen from '../profileScreen/ProfileScreen';
+import CreatePostsScreen from "../createPostsScreen/CreatePostsScreen.js";
+import PostsScreen from "../postsScreen/PostsScreen";
+import ProfileScreen from "../profileScreen/ProfileScreen";
 
 const BottomTabs = createBottomTabNavigator();
 
 const HomeScreen = ({ navigation }) => {
-
-
   return (
-    <BottomTabs.Navigator initialRouteName="PostsScreen"
+    <BottomTabs.Navigator
+      initialRouteName="PostsScreen"
       screenOptions={{
         tabBarShowLabel: false,
       }}
@@ -46,16 +45,20 @@ const HomeScreen = ({ navigation }) => {
           tabBarIcon: ({ focused, size, color }) => (
             <SimpleLineIcons name="grid" size={size} color={color} />
           ),
-        }} name='PostsScreen' component={PostsScreen}
+        }}
+        name="PostsScreen"
+        component={PostsScreen}
       />
       <BottomTabs.Screen
         options={{
           headerTitle: "Create a post",
           headerTitleAlign: "center",
           headerLeft: () => (
-            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.navigate('PostsScreen')}>
+            <TouchableOpacity
+              style={styles.backBtn}
+              onPress={() => navigation.navigate("PostsScreen")}
+            >
               <AntDesign name="arrowleft" size={24} color="black" />
-
             </TouchableOpacity>
           ),
           tabBarStyle: { display: "none" },
@@ -63,7 +66,9 @@ const HomeScreen = ({ navigation }) => {
           tabBarIcon: ({ focused, size, color }) => (
             <Feather name="plus" size={size} color={color} />
           ),
-        }} name='CreatePostsScreen' component={CreatePostsScreen}
+        }}
+        name="CreatePostsScreen"
+        component={CreatePostsScreen}
       />
       <BottomTabs.Screen
         options={{
@@ -71,11 +76,12 @@ const HomeScreen = ({ navigation }) => {
           tabBarIcon: ({ focused, size, color }) => (
             <Octicons name="person" size={size} color={color} />
           ),
-        }} name='ProfileScreen' component={ProfileScreen}
+        }}
+        name="ProfileScreen"
+        component={ProfileScreen}
       />
     </BottomTabs.Navigator>
-  )
-
+  );
 };
 
 const styles = StyleSheet.create({
@@ -96,9 +102,7 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     marginLeft: 16,
-  }
-
+  },
 });
 
 export default HomeScreen;
-
