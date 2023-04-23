@@ -72,7 +72,20 @@ const HomeScreen = ({ navigation }) => {
       />
       <BottomTabs.Screen
         options={{
-          headerShown: false,
+          headerStyle: {
+            backgroundColor: "#fff",
+          },
+          headerTitle: "Post",
+          headerTitleAlign: "center",
+
+          headerRight: () => (
+            <TouchableOpacity
+              style={styles.exit}
+              onPress={() => navigation.navigate("Login")}
+            >
+              <Ionicons name="exit-outline" size={24} color="black" />
+            </TouchableOpacity>
+          ),
           tabBarIcon: ({ focused, size, color }) => (
             <Octicons name="person" size={size} color={color} />
           ),
