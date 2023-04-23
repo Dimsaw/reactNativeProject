@@ -9,15 +9,16 @@ import {
   Image,
 } from "react-native";
 import { Camera, CameraType } from 'expo-camera';
+import MapView from 'react-native-maps';
 import * as MediaLibrary from "expo-media-library";
+import * as Location from 'expo-location';
 
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 
 // import { Ionicons } from "@expo/vector-icons";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Navigation from "../../../routing/routing";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const BottomTabs = createBottomTabNavigator();
+// const BottomTabs = createBottomTabNavigator();
 
 const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -25,6 +26,8 @@ const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
+    const location = await Location.getCurrentPositionAsync();
+    console.log('location', location);
     setPhoto(photo.uri);
     console.log("photo", photo);
   };
@@ -34,6 +37,11 @@ const CreatePostsScreen = ({ navigation }) => {
   }
 
   return (
+    // <BottomTabs.Navigator>
+    //   <BottomTabs.Screen>
+    //   </BottomTabs.Screen>
+
+
     <View style={styles.container}>
       <Camera style={styles.camera} ref={setCamera}>
         {photo && (
@@ -64,7 +72,16 @@ const CreatePostsScreen = ({ navigation }) => {
         <Text style={styles.btnText}>Publish
         </Text>
       </TouchableOpacity>
+      <View style={styles.btnDelete}>
+        <TouchableOpacity style={styles.btnTrashBin} >
+          <Ionicons name="trash-bin-outline" size={24} color="#BDBDBD" />
+        </TouchableOpacity>
+      </View>
+
     </View>
+
+
+    // </BottomTabs.Navigator>
 
   );
 };
@@ -134,6 +151,21 @@ const styles = StyleSheet.create({
     color: "#BDBDBD",
     fontSize: 16,
   },
+  btnDelete: {
+    flex: 1,
+    flexDirection: 'column-reverse',
+    alignItems: 'center',
+
+  },
+  btnTrashBin: {
+    justifyContent: "center",
+    alignItems: 'center',
+    width: 70,
+    height: 40,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 20,
+    marginBottom: 36,
+  }
 });
 
 export default CreatePostsScreen;
