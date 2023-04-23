@@ -1,5 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ImageBackground } from "react-native";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+
+import { FontAwesome } from '@expo/vector-icons';
 
 // import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -12,7 +16,11 @@ const CreatePostsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageBox}></View>
+      <Camera>
+        <TouchableOpacity>
+          <FontAwesome name="camera" size={24} color="black" />
+        </TouchableOpacity>
+      </Camera>
       <TextInput style={styles.input} textAlign={"left"} placeholder="Name" />
       <TextInput
         style={styles.input}
@@ -37,6 +45,8 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
   imageBox: {
+    width: 400,
+    height: 300,
     padding: 5,
     borderColor: "red",
   },
