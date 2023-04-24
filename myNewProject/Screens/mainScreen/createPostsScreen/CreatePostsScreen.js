@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from 'react';
+import { useState } from "react";
 import {
   View,
   Text,
@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { Camera, CameraType } from 'expo-camera';
-import MapView from 'react-native-maps';
+import { Camera, CameraType } from "expo-camera";
+import MapView from "react-native-maps";
 import * as MediaLibrary from "expo-media-library";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { FontAwesome, Ionicons, Feather } from "@expo/vector-icons";
 
 // import { Ionicons } from "@expo/vector-icons";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -27,20 +27,19 @@ const CreatePostsScreen = ({ navigation }) => {
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
     const location = await Location.getCurrentPositionAsync();
-    console.log('location', location);
+    console.log("location", location);
     setPhoto(photo.uri);
     console.log("photo", photo);
   };
 
   const sendPhoto = () => {
-    navigation.navigate('ProfileScreen')
-  }
+    navigation.navigate("ProfileScreen");
+  };
 
   return (
     // <BottomTabs.Navigator>
     //   <BottomTabs.Screen>
     //   </BottomTabs.Screen>
-
 
     <View style={styles.container}>
       <Camera style={styles.camera} ref={setCamera}>
@@ -57,32 +56,36 @@ const CreatePostsScreen = ({ navigation }) => {
             <FontAwesome name="camera" size={24} color="#BDBDBD" />
           </TouchableOpacity>
         </View>
-
       </Camera>
-      <TouchableOpacity activeOpacity={0.5} style={styles.addFoto} >
+      <TouchableOpacity activeOpacity={0.5} style={styles.addFoto}>
         <Text style={styles.btnText}>Upload a photo</Text>
       </TouchableOpacity>
+
       <TextInput style={styles.input} textAlign={"left"} placeholder="Name" />
-      <TextInput
-        style={styles.input}
-        textAlign={"left"}
-        placeholder="Password"
-      />
-      <TouchableOpacity activeOpacity={0.5} style={styles.btn} onPress={sendPhoto}>
-        <Text style={styles.btnText}>Publish
-        </Text>
+
+      <TouchableOpacity style={styles.pointLocation} activeOpacity={0.5}>
+        <Feather name="map-pin" size={24} color="#BDBDBD" />
+        <View style={styles.textLocation}>
+          <Text style={styles.btnText}>Location</Text>
+        </View>
+
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={styles.btn}
+        onPress={sendPhoto}
+      >
+        <Text style={styles.btnText}>Publish</Text>
       </TouchableOpacity>
       <View style={styles.btnDelete}>
-        <TouchableOpacity style={styles.btnTrashBin} >
+        <TouchableOpacity style={styles.btnTrashBin} activeOpacity={0.5}>
           <Ionicons name="trash-bin-outline" size={24} color="#BDBDBD" />
         </TouchableOpacity>
       </View>
-
     </View>
 
-
     // </BottomTabs.Navigator>
-
   );
 };
 
@@ -99,18 +102,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 240,
     justifyContent: "center",
-    alignItems: 'center',
+    alignItems: "center",
   },
   foto: {},
   btnContainer: {
-
     width: 60,
     height: 60,
     borderColor: "#FFFFFF",
     borderWidth: 1,
     borderRadius: "50%",
     justifyContent: "center",
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: "#FFFFFF",
   },
   btnCamera: {},
@@ -134,6 +136,22 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingLeft: 16,
   },
+  textLocation: {
+    paddingLeft: 6,
+  },
+  pointLocation: {
+    borderBottomWidth: 1,
+    height: 50,
+    borderRadius: 8,
+    borderColor: "#E8E8E8",
+    marginHorizontal: 16,
+    marginBottom: 16,
+
+    flexDirection: "row",
+
+    paddingTop: 15,
+  },
+
   btn: {
     borderWidth: 1,
     height: 50,
@@ -153,19 +171,18 @@ const styles = StyleSheet.create({
   },
   btnDelete: {
     flex: 1,
-    flexDirection: 'column-reverse',
-    alignItems: 'center',
-
+    flexDirection: "column-reverse",
+    alignItems: "center",
   },
   btnTrashBin: {
     justifyContent: "center",
-    alignItems: 'center',
+    alignItems: "center",
     width: 70,
     height: 40,
     backgroundColor: "#F6F6F6",
     borderRadius: 20,
     marginBottom: 36,
-  }
+  },
 });
 
 export default CreatePostsScreen;
