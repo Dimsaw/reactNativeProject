@@ -37,9 +37,6 @@ const CreatePostsScreen = ({ navigation }) => {
   };
 
   return (
-    // <BottomTabs.Navigator>
-    //   <BottomTabs.Screen>
-    //   </BottomTabs.Screen>
 
     <View style={styles.container}>
       <Camera style={styles.camera} ref={setCamera}>
@@ -63,7 +60,7 @@ const CreatePostsScreen = ({ navigation }) => {
 
       <TextInput style={styles.input} textAlign={"left"} placeholder="Name" />
 
-      <TouchableOpacity style={styles.pointLocation} activeOpacity={0.5}>
+      <TouchableOpacity style={styles.pointLocation} activeOpacity={0.5} onPress={() => navigation.navigate("MapScreen")}>
         <Feather name="map-pin" size={24} color="#BDBDBD" />
         <View style={styles.textLocation}>
           <Text style={styles.btnText}>Location</Text>
