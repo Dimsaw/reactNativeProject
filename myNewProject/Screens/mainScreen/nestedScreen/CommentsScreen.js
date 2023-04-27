@@ -3,7 +3,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, StyleSheet } from "react-native";
 
-const CommentScreen = () => {
+const CommentsScreen = () => {
     return (
         <View style={styles.container}>
             <Text>CommentScreen</Text>
@@ -20,4 +20,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CommentScreen;
+export default CommentsScreen;

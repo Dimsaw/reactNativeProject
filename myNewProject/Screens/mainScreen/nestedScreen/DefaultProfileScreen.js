@@ -1,16 +1,27 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image } from "react-native";
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity } from "react-native";
 import React from "react";
 
 const DefaultProfileScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.avatar}
-                source={require("../../../images/avatar.jpeg")}
-            />
-            <View style={styles.athorInfo}>
-                <Text style={styles.name}>Natalia Romanova</Text>
-                <Text style={styles.email}>email@example.com</Text>
+            <View style={styles.infoProfile}>
+                <Image
+                    style={styles.avatar}
+                    source={require("../../../images/avatar.jpeg")}
+                />
+                <View style={styles.athorInfo}>
+                    <Text style={styles.name}>Natalia Romanova</Text>
+                    <Text style={styles.email}>email@example.com</Text>
+                </View>
+            </View>
+
+            <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.btnCamera} onPress={() => navigation.navigate("MapScreen")}>
+                    <Text>Go to map</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnCamera} onPress={() => navigation.navigate("CommentsScreen")}>
+                    <Text>Go to comments</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -22,9 +33,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#FFFFFF",
-        flexDirection: "row",
+
         paddingLeft: 16,
         paddingRight: 16,
+    },
+    infoProfile: {
+        flexDirection: "row",
     },
     athorInfo: {
         flex: 1,
@@ -44,6 +58,9 @@ const styles = StyleSheet.create({
         color: "#212121",
         opacity: 0.8,
     },
+    btnContainer: {
+        paddingTop: 16
+    }
 });
 
 

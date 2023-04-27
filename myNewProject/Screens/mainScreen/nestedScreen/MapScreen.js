@@ -1,23 +1,38 @@
 import React from "react";
+import { StyleSheet, View } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Text, StyleSheet } from "react-native";
-
-const MapScreen = () => {
+const MapScreen = ({ route }) => {
+    console.log("titleLocation", route.params);
     return (
         <View style={styles.container}>
-            <Text>Map</Text>
+            <MapView
+                style={styles.map}
+                initialRegion={{
+                    latitude: 32.08088,
+                    longitude: 34.78057,
+                    latitudeDelta: 0.007,
+                    longitudeDelta: 0.007,
+                }}
+            >
+                <Marker
+                    coordinate={{ latitude: 32.08088, longitude: 34.78057 }}
+                    title="travel photo"
+                />
+            </MapView>
         </View>
     );
 };
 
+export default MapScreen;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: '#FFFFFF'
+    },
+    map: {
+        width: "100%",
+        height: "100%",
     },
 });
 
-export default MapScreen;
