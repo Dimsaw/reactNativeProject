@@ -1,15 +1,15 @@
 import React from "react";
-import { useCallback } from "react";
+
 import { Provider } from "react-redux";
 import { store } from './redux/dashboard/store'
-
-import { NavigationContainer } from "@react-navigation/native";
-import Navigation from "./routing/routing";
-
-
+import { useCallback } from "react";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+
+import { Main } from './components/Main'
+
+
 
 
 
@@ -32,9 +32,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <NavigationContainer onLayout={onLayoutRootView}>
-        <Navigation />
-      </NavigationContainer>
+      <Main />
     </Provider>
 
   );
