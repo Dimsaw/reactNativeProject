@@ -4,6 +4,7 @@ import {
   StyleSheet,
   View,
   Text,
+  Image,
   ImageBackground,
   TextInput,
   TouchableOpacity,
@@ -13,12 +14,17 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   Button,
+  ScrollView,
 } from "react-native";
 
-// import { useDispatch } from "react-redux";
-// import { getStorage, ref, uploadBytes, getDownloadUrl } from "firebase/storage";
+import * as ImagePicker from "expo-image-picker";
 
-// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { AntDesign } from "@expo/vector-icons";
+
+import { useDispatch } from "react-redux";
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 // import { authSignUpUser } from "../../../redux/auth/authOperation";
 
@@ -32,57 +38,218 @@ const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
 
 export default function Registration({ navigation }) {
-  const [dimensions, setDimensions] = useState({
-    window: windowDimensions,
-    screen: screenDimensions,
-  });
-
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      "change",
-      ({ window, screen }) => {
-        setDimensions({ window, screen });
-      }
-    );
-    return () => subscription?.remove();
-  });
+  const [windowWidth, setWindowWidth] = useState(
+    Dimensions.get("window").width
+  );
+  const [windowHeight, setWindowHeight] = useState(
+    Dimensions.get("window").height
+  );
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
-  // const [login, setLogin] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+
+  const [pickedImagePath, setPickedImagePath] = useState("");
+
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isFocusedLogin, setIsFocusedLogin] = useState(false);
+  const [isFocusedEmail, setIsFocusedEmail] = useState(false);
+  const [isFocusedPassword, setIsFocusedPassword] = useState(false);
+
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+  const dispatch = useDispatch();
+
+  const downloadAvatar = async () => {
+    try {
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        alert(
+          "Вы отказались разрешить этому приложению доступ к вашим фотографиям"
+        );
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setPickedImagePath(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log("error-message", error.message);
+    }
+  };
+
+  const deleteAvatar = () => setPickedImagePath("");
+
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width;
+      setWindowWidth(width);
+      const height = Dimensions.get("window").height;
+      setWindowHeight(height);
+    };
+    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+
+    return () => dimensionsHandler.remove();
+  }, []);
+
+  const loginHandler = (login) => setLogin(login);
+  const emailHandler = (email) => setEmail(email);
+  const passwordHandler = (password) => setPassword(password);
+
+  const uploadPhotoToServer = async () => {
+    try {
+      const response = await fetch(pickedImagePath);
+      const file = await response.blob();
+      const uniquePostId = uuidv4();
+      const storage = getStorage();
+      const storageRef = ref(storage, `avatarImage/${uniquePostId}`);
+
+      await uploadBytes(storageRef, file);
+
+      const photoRef = await getDownloadURL(storageRef);
+      return photoRef;
+    } catch (error) {
+      console.log("error-message.upoload-photo", error.message);
+    }
+  };
+
+  const submitForm = async () => {
+    try {
+      if (!login.trim() || !email.trim() || !password.trim()) {
+        Alert.alert(`All fields must be filled`);
+        return;
+      }
+
+      const imageRef = await uploadPhotoToServer();
+      const newUser = {
+        avatarImage: imageRef,
+        login,
+        email,
+        password,
+      };
+      dispatch(authSignUpUser(newUser));
+      setLogin("");
+      setEmail("");
+      setPassword("");
+      setPickedImagePath("");
+      Keyboard.dismiss();
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
+
+  useEffect(() => {
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
 
   const touchSreen = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
 
+  // const submitForm = () => {
+  //   try {
+  //     if (!state.email.trim() || !state.password.trim() || !state.login.trim()) { return alert("Please, fill all!") }
+  //     console.log(state);
+  //     // const newUser = {
+  //     //   login: state.email,
+  //     //   email: state.email,
+  //     //   password: state.password,
+  //     // };
+  //     // dispatch(authSignUpUser(newUser))
 
-  const submitForm = () => {
-    if (!state.email.trim() || !state.password.trim() || !state.login.trim()) { return alert("Please, fill all!") }
-    console.log(state);
-    setState('');
-    navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
-  };
+  //     setState('');
+  //     navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
 
+  //   } catch (error) {
+  //     Alert.alert(error.message);
+  //   }
+
+  // };
 
   return (
-
-
-    <TouchableWithoutFeedback onPress={touchSreen}>
-      <View style={styles.container}>
-        <ImageBackground
-          style={styles.image}
-          source={require("../../../images/photoGround.jpg")}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={touchSreen}>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : 0}>
+          <ImageBackground
+            style={{
+              ...styles.image,
+              width: windowWidth,
+              height: windowHeight,
+            }}
+            // style={
+            //   styles.image
+
+            // }
+            source={require("../../../images/photoGround.jpg")}
+          >
             <View
               style={{
                 ...styles.menu,
                 marginBottom: isShowKeyboard ? -170 : 0,
               }}
             >
+              {pickedImagePath ? (
+                <>
+                  <View
+                    style={{
+                      ...styles.imageThumb,
+                      left: (windowWidth - 120) / 2,
+                    }}
+                  >
+                    <Image
+                      style={styles.avatarImage}
+                      source={{ uri: pickedImagePath }}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={deleteAvatar}
+                    style={{
+                      ...styles.addButton,
+                      left: windowWidth / 2 + 47.5,
+                    }}
+                  >
+                    <AntDesign name="pluscircleo" size={24} color="#E8E8E8" />
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <View
+                    style={{
+                      ...styles.imageThumb,
+                      left: (windowWidth - 120) / 2,
+                    }}
+                  ></View>
+                  <TouchableOpacity
+                    onPress={downloadAvatar}
+                    style={{
+                      ...styles.addButton,
+                      left: windowWidth / 2 + 47.5,
+                    }}
+                  >
+                    <AntDesign name="pluscircleo" size={24} color="#FF6C00" />
+                  </TouchableOpacity>
+                </>
+              )}
               <Text style={styles.text}> Registration</Text>
               <View style={styles.form}>
                 <TextInput
@@ -132,10 +299,10 @@ export default function Registration({ navigation }) {
                 </TouchableOpacity>
               </View>
             </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -145,11 +312,38 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     fontFamily: "Roboto-Regular",
   },
+  containerMenu: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   image: {
     flex: 1,
     resizeMode: "cover",
+
     justifyContent: "flex-end",
     // alignItems: 'center'
+  },
+
+  imageThumb: {
+    top: -60,
+    position: "absolute",
+    width: 120,
+    height: 120,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
+  },
+  addButton: {
+    position: "absolute",
+    top: 21,
+    width: 25,
+    height: 25,
+  },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
+    resizeMode: "cover",
   },
 
   menu: {

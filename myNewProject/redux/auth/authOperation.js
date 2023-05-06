@@ -8,31 +8,31 @@ import {
 
 import { Alert } from "react-native";
 
-import { auth } from "../../firebase/config";
+import { auth } from "../../firebase/firebase";
 
-import { authReducer } from "./authReducer";
+import { authSlice } from "./authSlice";
 
-const { updateUserProfile, authStateChange, authSignOut } = authReducer.actions;
+const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
 
 export const authSignUpUser =
-    ({ login, email, password, avatarImage }) =>
+    ({ login, email, password }) =>
         async (dispatch) => {
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
 
                 await updateProfile(auth.currentUser, {
                     displayName: login,
-                    photoURL: avatarImage,
+
                 });
 
-                const { uid, displayName, photoURL } = auth.currentUser;
+                const { uid, displayName } = auth.currentUser;
 
                 dispatch(
                     updateUserProfile({
                         userId: uid,
                         login: displayName,
                         email,
-                        avatarImage: photoURL,
+
                     })
                 );
             } catch (error) {

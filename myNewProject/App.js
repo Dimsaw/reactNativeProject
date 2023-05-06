@@ -14,6 +14,8 @@ import { Main } from './components/Main'
 
 
 
+LogBox.ignoreLogs(['Warning: ...']);
+LogBox.ignoreAllLogs();
 
 
 export default function App() {
@@ -32,8 +34,7 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  LogBox.ignoreLogs(['Warning: ...']);
-  LogBox.ignoreAllLogs();
+
 
   return (
 
