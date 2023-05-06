@@ -15,6 +15,13 @@ import {
   Button,
 } from "react-native";
 
+// import { useDispatch } from "react-redux";
+// import { getStorage, ref, uploadBytes, getDownloadUrl } from "firebase/storage";
+
+// import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+// import { authSignUpUser } from "../../../redux/auth/authOperation";
+
 const initialState = {
   login: "",
   email: "",
@@ -42,6 +49,9 @@ export default function Registration({ navigation }) {
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  // const [login, setLogin] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
   const touchSreen = () => {
     setIsShowKeyboard(false);
@@ -50,7 +60,7 @@ export default function Registration({ navigation }) {
 
 
   const submitForm = () => {
-    if (!state.email || !state.password) { return alert("Please, fill all!") }
+    if (!state.email.trim() || !state.password.trim() || !state.login.trim()) { return alert("Please, fill all!") }
     console.log(state);
     setState('');
     navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
