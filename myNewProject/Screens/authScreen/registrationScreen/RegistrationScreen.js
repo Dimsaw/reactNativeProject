@@ -161,6 +161,21 @@ export default function Registration({ navigation }) {
     Keyboard.dismiss();
   };
 
+  const checkKeyboardLogin = () => {
+    setIsShowKeyboard(true);
+    setIsFocusedLogin(true);
+
+  };
+  const checkKeyboardEmail = () => {
+    setIsShowKeyboard(true);
+    setIsFocusedEmail(true)
+  };
+
+  const checkKeyboardPassword = () => {
+    setIsShowKeyboard(true);
+    setIsFocusedPassword(true)
+  };
+
   // const submitForm = () => {
   //   try {
   //     if (!state.email.trim() || !state.password.trim() || !state.login.trim()) { return alert("Please, fill all!") }
@@ -184,7 +199,7 @@ export default function Registration({ navigation }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={{ ...styles.container }}
     >
       <TouchableWithoutFeedback onPress={touchSreen}>
         <View
@@ -196,15 +211,12 @@ export default function Registration({ navigation }) {
               width: windowWidth,
               height: windowHeight,
             }}
-            // style={
-            //   styles.image
-
-            // }
             source={require("../../../images/photoGround.jpg")}
           >
             <View
               style={{
                 ...styles.menu,
+                width: windowWidth,
                 marginBottom: isShowKeyboard ? -170 : 0,
               }}
             >
@@ -253,35 +265,43 @@ export default function Registration({ navigation }) {
               <Text style={styles.text}> Registration</Text>
               <View style={styles.form}>
                 <TextInput
-                  style={styles.input}
+                  style={{
+                    ...styles.input,
+                    borderColor: isFocusedLogin ? "#FF6C00" : "#E8E8E8",
+                  }}
+                  onBlur={() => setIsFocusedLogin(false)}
+                  cursorColor={"#BDBDBD"}
+                  onChangeText={loginHandler}
                   textAlign={"left"}
-                  value={state.login}
+                  value={login}
                   placeholder="Login"
-                  onFocus={() => setIsShowKeyboard(true)}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, login: value }))
-                  }
+                  onFocus={checkKeyboardLogin}
                 />
                 <TextInput
-                  style={styles.input}
+                  style={{
+                    ...styles.input,
+                    borderColor: isFocusedEmail ? "#FF6C00" : "#E8E8E8",
+                  }}
+                  onBlur={() => setIsFocusedEmail(false)}
+                  cursorColor={"#BDBDBD"}
+                  onChangeText={emailHandler}
                   textAlign={"left"}
-                  value={state.email}
+                  value={email}
                   placeholder="Email"
-                  onFocus={() => setIsShowKeyboard(true)}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
+                  onFocus={checkKeyboardEmail}
                 />
                 <TextInput
-                  style={styles.input}
+                  style={{
+                    ...styles.input,
+                    borderColor: isFocusedPassword ? "#FF6C00" : "#E8E8E8",
+                  }}
+                  onBlur={() => setIsFocusedPassword(false)}
+                  cursorColor={"#BDBDBD"}
+                  onChangeText={passwordHandler}
                   textAlign={"left"}
-                  value={state.password}
+                  value={password}
                   placeholder="Password"
-                  secureTextEntry={true}
-                  onFocus={() => setIsShowKeyboard(true)}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
+                  onFocus={checkKeyboardPassword}
                 />
               </View>
               <View style={styles.boxBtn}>
@@ -347,15 +367,28 @@ const styles = StyleSheet.create({
   },
 
   menu: {
+    // flex: 1,
+    // alignItems: "center",
+    // backgroundColor: "#FFFFFF",
+    // borderTopLeftRadius: 25,
+    // borderTopRightRadius: 25,
     backgroundColor: "#FFFFFF",
-    borderColor: "green",
-
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
+
     // marginBottom: -50,
   },
 
   input: {
+    // marginBottom: 16,
+    // paddingHorizontal: 16,
+    // paddingTop: 16,
+    // paddingBottom: 15,
+    // backgroundColor: "#F6F6F6",
+    // height: 50,
+    // borderWidth: 1,
+    // borderRadius: 8,
+    // color: "#212121",
     borderWidth: 1,
     height: 50,
     borderRadius: 8,
