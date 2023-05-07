@@ -13,8 +13,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Dimensions,
-  Button,
-  ScrollView,
+  Alert,
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
@@ -24,15 +23,17 @@ import { AntDesign } from "@expo/vector-icons";
 
 import { useDispatch } from "react-redux";
 
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-// import { authSignUpUser } from "../../../redux/auth/authOperation";
+import { storage } from "../../../firebase/firebase";
 
-const initialState = {
-  login: "",
-  email: "",
-  password: "",
-};
+import { authSignUpUser } from "../../../redux/auth/authOperation";
+
+// const initialState = {
+//   login: "",
+//   email: "",
+//   password: "",
+// };
 
 const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
@@ -46,7 +47,7 @@ export default function Registration({ navigation }) {
   );
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [state, setState] = useState(initialState);
+  // const [state, setState] = useState(initialState);
 
   const [pickedImagePath, setPickedImagePath] = useState("");
 
@@ -62,6 +63,22 @@ export default function Registration({ navigation }) {
 
   const dispatch = useDispatch();
 
+  // const pickAvatar = async () => {
+  //   const result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [1, 1],
+  //     quality: 1,
+  //   });
+
+  //   if (!result.canceled) {
+  //     setState(prevState => ({
+  //       ...prevState,
+  //       avatar: result.assets[0].uri,
+  //     }));
+  //   }
+  // };
+
   const downloadAvatar = async () => {
     try {
       const permissionResult =
@@ -69,7 +86,7 @@ export default function Registration({ navigation }) {
 
       if (permissionResult.granted === false) {
         alert(
-          "Вы отказались разрешить этому приложению доступ к вашим фотографиям"
+          "You refused to allow this app to access your photos"
         );
         return;
       }
@@ -80,10 +97,12 @@ export default function Registration({ navigation }) {
         aspect: [4, 3],
         quality: 1,
       });
+      console.log('resultfoto', result);
 
-      if (!result.canceled) {
-        setPickedImagePath(result.assets[0].uri);
-      }
+
+      setPickedImagePath(result.assets[0].uri);
+      console.log('setPickedImagePath', setPickedImagePath);
+
     } catch (error) {
       console.log("error-message", error.message);
     }
@@ -110,10 +129,13 @@ export default function Registration({ navigation }) {
   const uploadPhotoToServer = async () => {
     try {
       const response = await fetch(pickedImagePath);
+      console.log('response', response);
       const file = await response.blob();
+      console.log('file', file);
       const uniquePostId = uuidv4();
-      const storage = getStorage();
+      // const storage = getStorage();
       const storageRef = ref(storage, `avatarImage/${uniquePostId}`);
+      console.log('storageRef', storageRef);
 
       await uploadBytes(storageRef, file);
 
@@ -123,31 +145,48 @@ export default function Registration({ navigation }) {
       console.log("error-message.upoload-photo", error.message);
     }
   };
+  // const uploadPhotoToServer = async () => {
+  //   let imageRef;
 
-  const submitForm = async () => {
-    try {
-      if (!login.trim() || !email.trim() || !password.trim()) {
-        Alert.alert(`All fields must be filled`);
-        return;
-      }
+  //   if (state.avatar) {
+  //     const res = await fetch(state.avatar);
+  //     const file = await res.blob();
+  //     const uniqId = Date.now().toString();
+  //     imageRef = ref(storage, `userAvatars/${uniqId}`);
+  //     await uploadBytes(imageRef, file);
+  //   } else {
+  //     imageRef = ref(storage, `userAvatars/avatar_placeholder.jpg`);
+  //   }
 
-      const imageRef = await uploadPhotoToServer();
-      const newUser = {
-        avatarImage: imageRef,
-        login,
-        email,
-        password,
-      };
-      dispatch(authSignUpUser(newUser));
-      setLogin("");
-      setEmail("");
-      setPassword("");
-      setPickedImagePath("");
-      Keyboard.dismiss();
-    } catch (error) {
-      Alert.alert(error.message);
-    }
-  };
+  //   const processedPhoto = await getDownloadURL(imageRef);
+  //   return processedPhoto;
+  // };
+
+  // const submitForm = async () => {
+  //   try {
+  //     if (!login.trim() || !email.trim() || !password.trim()) {
+  //       Alert.alert(`All fields must be filled`);
+  //       return;
+  //     }
+
+  //     const imageRef = await uploadPhotoToServer();
+  //     const newUser = {
+  //       avatarImage: imageRef,
+  //       login,
+  //       email,
+  //       password,
+  //     };
+  //     console.log('user', user);
+  //     dispatch(authSignUpUser(newUser));
+  //     setLogin("");
+  //     setEmail("");
+  //     setPassword("");
+  //     setPickedImagePath("");
+  //     Keyboard.dismiss();
+  //   } catch (error) {
+  //     Alert.alert(error.message);
+  //   }
+  // };
 
   useEffect(() => {
     async function prepare() {
@@ -176,25 +215,28 @@ export default function Registration({ navigation }) {
     setIsFocusedPassword(true)
   };
 
-  // const submitForm = () => {
-  //   try {
-  //     if (!state.email.trim() || !state.password.trim() || !state.login.trim()) { return alert("Please, fill all!") }
-  //     console.log(state);
-  //     // const newUser = {
-  //     //   login: state.email,
-  //     //   email: state.email,
-  //     //   password: state.password,
-  //     // };
-  //     // dispatch(authSignUpUser(newUser))
+  const submitForm = async () => {
+    try {
+      if (!email.trim() || !password.trim() || !login.trim()) { return alert("Please, fill all!") }
+      // const imageRef = await uploadPhotoToServer();
+      // console.log('imageRef', imageRef);
 
-  //     setState('');
-  //     navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
+      const newUser = {
+        login,
+        email,
+        password,
+      };
+      console.log('newUser', newUser);
+      dispatch(authSignUpUser(newUser))
 
-  //   } catch (error) {
-  //     Alert.alert(error.message);
-  //   }
+      // setState('');
+      // navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
 
-  // };
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+
+  };
 
   return (
     <KeyboardAvoidingView
@@ -299,11 +341,19 @@ export default function Registration({ navigation }) {
                   cursorColor={"#BDBDBD"}
                   onChangeText={passwordHandler}
                   textAlign={"left"}
+                  secureTextEntry={isPasswordHidden}
                   value={password}
                   placeholder="Password"
                   onFocus={checkKeyboardPassword}
+
                 />
+                <TouchableOpacity style={styles.toogleBtnPassword} activeOpacity={0.5} onPress={() =>
+                  setIsPasswordHidden((prevState) => !prevState)
+                }>
+                  <Text style={styles.toogleTextPassword}>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
+                </TouchableOpacity>
               </View>
+
               <View style={styles.boxBtn}>
                 <TouchableOpacity
                   activeOpacity={0.5}
@@ -419,6 +469,17 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     justifyContent: "center",
     alignItems: "center",
+  },
+  toogleBtnPassword: {
+    position: 'absolute',
+    right: 16,
+    top: 150,
+    paddingRight: 16,
+  },
+  toogleTextPassword: {
+    color: '#1B4371',
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
   },
   btnText: {
     color: "#FFFFFF",

@@ -1,12 +1,15 @@
 import React from "react";
+import { Provider } from "react-redux";
+
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { LogBox } from 'react-native';
 
 
 import { useCallback } from "react";
-import * as SplashScreen from "expo-splash-screen";
-import { useFonts } from "expo-font";
 
-import { Provider } from "react-redux";
+
+
 import { store } from './redux/dashboard/store'
 
 import { Main } from './components/Main'
@@ -38,8 +41,8 @@ export default function App() {
 
   return (
 
-    <Provider store={store} onLayout={onLayoutRootView}>
-      <Main />
+    <Provider store={store}>
+      <Main onReady={onLayoutRootView} />
     </Provider>
 
   );

@@ -18,9 +18,9 @@ const Navigation = () => {
     >
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Registration" component={Registration} />
-      {/* <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   );
 };

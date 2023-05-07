@@ -42,11 +42,31 @@ export default function Login({ navigation }) {
   });
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  // const [login, setLogin] = useState("");
+  // const [email, setEmail] = useState("");
   const [state, setState] = useState(initialState);
+
+  const [isFocusedPassword, setIsFocusedPassword] = useState(false);
+  const [isFocusedEmail, setIsFocusedEmail] = useState(false);
+
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+  // const loginHandler = (login) => setLogin(login);
+  // const emailHandler = (email) => setEmail(email);
 
   const touchSreen = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const checkKeyboardPassword = () => {
+    setIsShowKeyboard(true);
+    setIsFocusedPassword(true);
+
+  };
+  const checkKeyboardEmail = () => {
+    setIsShowKeyboard(true);
+    setIsFocusedEmail(true)
   };
 
   const submitForm = () => {
@@ -74,26 +94,40 @@ export default function Login({ navigation }) {
               <Text style={styles.text}> Sign in</Text>
               <View style={styles.form}>
                 <TextInput
-                  style={styles.input}
+                  style={{
+                    ...styles.input,
+                    borderColor: isFocusedEmail ? "#FF6C00" : "#E8E8E8",
+                  }}
+                  onBlur={() => setIsFocusedEmail(false)}
                   textAlign={"left"}
                   value={state.email}
                   placeholder="Email"
-                  onFocus={() => setIsShowKeyboard(true)}
+                  onFocus={checkKeyboardEmail}
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, email: value }))
                   }
                 />
                 <TextInput
-                  style={styles.input}
+                  style={{
+                    ...styles.input,
+                    borderColor: isFocusedPassword ? "#FF6C00" : "#E8E8E8",
+                  }}
+                  onBlur={() => setIsFocusedPassword(false)}
                   textAlign={"left"}
                   value={state.password}
                   placeholder="Password"
-                  secureTextEntry={true}
-                  onFocus={() => setIsShowKeyboard(true)}
+                  secureTextEntry={isPasswordHidden}
+
+                  onFocus={checkKeyboardPassword}
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, password: value }))
                   }
                 />
+                <TouchableOpacity style={styles.toogleBtnPassword} activeOpacity={0.5} onPress={() =>
+                  setIsPasswordHidden((prevState) => !prevState)
+                }>
+                  <Text style={styles.toogleTextPassword}>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.boxBtn}>
                 <TouchableOpacity
@@ -147,6 +181,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     paddingLeft: 16,
+  },
+  toogleBtnPassword: {
+    position: 'absolute',
+    right: 16,
+    top: 80,
+    paddingRight: 16,
+  },
+  toogleTextPassword: {
+    color: '#1B4371',
+    fontSize: 16,
+    fontFamily: "Roboto-Regular",
   },
 
   text: {
