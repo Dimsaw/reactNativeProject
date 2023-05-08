@@ -10,10 +10,12 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Platform,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from 'react-native';
 
 import { FontAwesome5, Feather } from '@expo/vector-icons';
+import { v4 as uuidv4 } from "uuid";
 
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
@@ -22,14 +24,6 @@ import { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
 import { addDoc, collection } from 'firebase/firestore';
 
 import { storage, firestore } from '../../../firebase/firebase';
-
-// import { FontAwesome } from '@expo/vector-icons';
-
-
-// import { Feather } from "@expo/vector-icons";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-// const BottomTabs = createBottomTabNavigator();
 
 const CreatePostsScreen = ({ route, navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -40,16 +34,16 @@ const CreatePostsScreen = ({ route, navigation }) => {
   const [location, setLocation] = useState('');
   const [coords, setCoords] = useState(null);
   const [type, setType] = useState(CameraType.back);
-  const [error, setError] = useState(null);
   const { nickName, userId } = useSelector(state => state.auth);
+  const [isDisabledPublish, setIsDisabledPublish] = useState(false);
 
   const [titleLocation, setTitleLocation] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
-  const [titleBorderColor, setTitleBorderColor] = useState("#E8E8E8");
-  const [titleBackgroundColor, setTitleBackgroundColor] = useState("#F6F6F6");
-  const [titleLocationBorderColor, setTitleLocationBorderColor] = useState("#E8E8E8");
-  const [titleLocationBackgroundColor, setTitleLocationBackgroundColor] = useState("#F6F6F6");
+  const [titleBorderColor, setTitleBorderColor] = useState(false);
+  const [titleBackgroundColor, setTitleBackgroundColor] = useState(false);
+  const [titleLocationBorderColor, setTitleLocationBorderColor] = useState(false);
+  const [titleLocationBackgroundColor, setTitleLocationBackgroundColor] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -62,10 +56,16 @@ const CreatePostsScreen = ({ route, navigation }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    photo && title && location
+      ? setIsDisabledPublish(true)
+      : setIsDisabledPublish(false);
+  }, [title, location, photo]);
+
   const uploadPhotoToServer = async () => {
     const res = await fetch(photo);
     const file = await res.blob();
-    const uniqId = Date.now().toString();
+    const uniqId = uuidv4();
     const imageRef = ref(storage, `postImages/${uniqId}`);
     await uploadBytes(imageRef, file);
     const processedPhoto = await getDownloadURL(imageRef);
@@ -87,7 +87,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
 
   const sendPost = () => {
     if (!photo || !title || !location) {
-      setError('Пожалуйста, заполните все поля!');
+      alert('Please fill in all fields!');
       return;
     }
 
@@ -96,10 +96,10 @@ const CreatePostsScreen = ({ route, navigation }) => {
   };
 
   const uploadPostToServer = async () => {
-    const createdAt = Date.now();
+    const createdAt = uuidv4()
     const photo = await uploadPhotoToServer();
 
-    await addDoc(collection(db, `posts`), {
+    await addDoc(collection(firestore, `posts`), {
       photo,
       title,
       location,
@@ -117,7 +117,6 @@ const CreatePostsScreen = ({ route, navigation }) => {
     setTitle('');
     setLocation('');
     setCoords(null);
-    setError(null);
   };
 
   const changeType = () => {
@@ -129,8 +128,10 @@ const CreatePostsScreen = ({ route, navigation }) => {
   }
 
   if (hasPermission === false) {
-    return <Text>Нет доступа к камере</Text>;
+    return <Text>No camera access</Text>;
   }
+
+
 
   // const sendPost = () => {
   //   setIsShowKeyboard(false);
@@ -173,8 +174,8 @@ const CreatePostsScreen = ({ route, navigation }) => {
 
   return (
 
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={{ ...styles.container, marginVertical: isShowKeyboard ? -30 : 0, }}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' && 'padding'}
@@ -192,47 +193,65 @@ const CreatePostsScreen = ({ route, navigation }) => {
             {photo && <Image source={{ uri: photo }} style={styles.photo} />}
           </View>
           <Text style={styles.cameraLabel}>
-            {photo ? 'Редактировать фото' : 'Загрузите фото'}
+            {photo ? 'Edit photo' : 'Upload a photo'}
           </Text>
+          {/* const checkKeyboardPassword = () => {
+            setIsShowKeyboard(true);
+          setIsFocusedPassword(true);
 
-          <View style={styles.form}>
+  };
+  const checkKeyboardEmail = () => {
+            setIsShowKeyboard(true);
+          setIsFocusedEmail(true)
+  }; */}
+
+          <View style={{
+            ...styles.form,
+            marginVertical: isShowKeyboard ? -30 : 0,
+          }}>
             <TextInput
-              style={styles.titleInput}
+              style={{
+                ...styles.titleInput,
+                borderColor: titleBorderColor ? "#FF6C00" : "#F6F6F6",
+                backgroundColor: titleBackgroundColor ? 'transparent' : '#F6F6F6'
+              }}
               onSubmitEditing={() => Keyboard.dismiss()}
-              placeholder="Название..."
+              placeholder="Namе..."
               placeholderTextColor="#BDBDBD"
               onChangeText={value => setTitle(value)}
               value={title}
               onFocus={() => {
-                setTitleBorderColor("#FF6C00");
-                setTitleBackgroundColor("transparent");
+                setTitleBorderColor(true);
+                setTitleBackgroundColor(true);
                 setIsShowKeyboard(true);
               }}
               onBlur={() => {
-                setTitleBackgroundColor("#F6F6F6");
-                setTitleBorderColor("#E8E8E8");
+                setTitleBackgroundColor(false);
+                setTitleBorderColor(false);
+                setIsShowKeyboard(false)
               }}
             />
             <View style={{ position: 'relative' }}>
               <TextInput
                 style={{
                   ...styles.locationInput,
-                  borderColor: titleBorderColor,
-                  backgroundColor: titleBackgroundColor
+                  borderColor: titleLocationBorderColor ? "#FF6C00" : "#F6F6F6",
+                  backgroundColor: titleLocationBackgroundColor ? 'transparent' : '#F6F6F6'
                 }}
                 onSubmitEditing={() => Keyboard.dismiss()}
-                placeholder="Местность..."
+                placeholder="Location..."
                 placeholderTextColor="#BDBDBD"
                 onChangeText={value => setLocation(value)}
                 value={location}
                 onFocus={() => {
-                  setTitleLocationBorderColor("#FF6C00");
-                  setTitleLocationBackgroundColor("transparent");
+                  setTitleLocationBackgroundColor(true);
+                  setTitleLocationBorderColor(true);
                   setIsShowKeyboard(true);
                 }}
                 onBlur={() => {
-                  setTitleLocationBackgroundColor("#F6F6F6");
-                  setTitleLocationBorderColor("#E8E8E8");
+                  setTitleLocationBorderColor(false);
+                  setTitleLocationBackgroundColor(false);
+                  setIsShowKeyboard(false)
                 }}
               />
               <Feather
@@ -246,7 +265,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
             <TouchableOpacity
               style={{
                 ...styles.btn,
-                backgroundColor: photo ? '#FF6C00' : '#F6F6F6',
+                backgroundColor: isDisabledPublish ? '#FF6C00' : '#F6F6F6',
               }}
               activeOpacity={0.9}
               onPress={sendPost}
@@ -254,13 +273,13 @@ const CreatePostsScreen = ({ route, navigation }) => {
               <Text
                 style={{
                   ...styles.btnLabel,
-                  color: photo ? '#FFFFFF' : '#BDBDBD',
+                  color: isDisabledPublish ? '#FFFFFF' : '#BDBDBD',
                 }}
               >
-                Опубликовать
+                Publish
               </Text>
             </TouchableOpacity>
-            {error && <ErrorMsg error={error} />}
+            {/* {error && <ErrorMsg error={error} />} */}
           </View>
 
           <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -269,6 +288,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
               style={{
                 ...styles.trashBtn,
                 backgroundColor: photo ? '#FF6C00' : '#F6F6F6',
+                marginBottom: isShowKeyboard ? 62 : 32,
               }}
             >
               <Feather
@@ -421,6 +441,7 @@ const styles = StyleSheet.create({
 
   form: {
     marginHorizontal: 16,
+
   },
 
   titleInput: {
@@ -429,8 +450,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',
-    color: '#212121',
-    borderBottomColor: '#E8E8E8',
     borderBottomWidth: 1,
   },
 
@@ -440,14 +459,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     fontFamily: 'Roboto-Regular',
-    color: '#212121',
-    borderBottomColor: '#E8E8E8',
     borderBottomWidth: 1,
   },
 
   locationIcon: {
     position: 'absolute',
-    top: 13,
+    top: 16,
     color: '#bdbdbd',
   },
 
@@ -467,7 +484,6 @@ const styles = StyleSheet.create({
   },
 
   trashBtn: {
-    marginBottom: 10,
     width: 70,
     height: 40,
     borderRadius: 20,

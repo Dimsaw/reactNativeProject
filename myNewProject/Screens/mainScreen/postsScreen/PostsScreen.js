@@ -9,7 +9,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 const NestedScreen = createStackNavigator();
 
 const PostsScreen = ({ route }) => {
-    // console.log(route.params)
 
     return (
         <NestedScreen.Navigator>
