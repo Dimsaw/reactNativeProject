@@ -279,7 +279,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
                 Publish
               </Text>
             </TouchableOpacity>
-            {/* {error && <ErrorMsg error={error} />} */}
+
           </View>
 
           <View style={{ flex: 1, justifyContent: 'flex-end' }}>
@@ -288,7 +288,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
               style={{
                 ...styles.trashBtn,
                 backgroundColor: photo ? '#FF6C00' : '#F6F6F6',
-                marginBottom: isShowKeyboard ? 62 : 32,
+                marginBottom: isShowKeyboard ? 0 : 32,
               }}
             >
               <Feather

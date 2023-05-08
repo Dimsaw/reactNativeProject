@@ -12,7 +12,7 @@ import { useCallback } from "react";
 
 import { store } from './redux/dashboard/store'
 
-import { Main } from './components/Main'
+import { Main } from './components/Main/Main'
 
 
 

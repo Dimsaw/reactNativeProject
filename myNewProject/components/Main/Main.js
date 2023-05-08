@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 
 
 import { NavigationContainer } from "@react-navigation/native";
-import Navigation from "../routing/routing";
+import Navigation from "../../routing/routing";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { authStateChangeUser } from "../redux/auth/authOperation";
+import { authStateChangeUser } from "../../redux/auth/authOperation";
 
 
 export const Main = () => {
