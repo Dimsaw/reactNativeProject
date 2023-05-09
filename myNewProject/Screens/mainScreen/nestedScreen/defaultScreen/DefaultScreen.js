@@ -7,7 +7,7 @@ const DefaultScreen = ({ navigation }) => {
             <View style={styles.infoProfile}>
                 <Image
                     style={styles.avatar}
-                    source={require("../../../images/smallAvatar.jpg")}
+                    source={require("../../../../images/smallAvatar.jpg")}
                 />
                 <View style={styles.athorInfo}>
                     <Text style={styles.name}>Natalia Romanova</Text>

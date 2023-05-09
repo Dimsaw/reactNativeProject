@@ -25,15 +25,16 @@ import { useDispatch } from "react-redux";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import { storage } from "../../../firebase/firebase";
+import { storage } from "../../../firebase/config";
 
 import { authSignUpUser } from "../../../redux/auth/authOperation";
 
-// const initialState = {
-//   login: "",
-//   email: "",
-//   password: "",
-// };
+const initialState = {
+  email: '',
+  password: '',
+  nickname: '',
+  avatar: null,
+};
 
 const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
@@ -47,9 +48,9 @@ export default function Registration({ navigation }) {
   );
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  // const [state, setState] = useState(initialState);
+  const [state, setState] = useState(initialState);
 
-  const [pickedImagePath, setPickedImagePath] = useState("");
+  const [pickedImagePath, setPickedImagePath] = useState(null)
 
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
@@ -62,53 +63,6 @@ export default function Registration({ navigation }) {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
   const dispatch = useDispatch();
-
-  // const pickAvatar = async () => {
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [1, 1],
-  //     quality: 1,
-  //   });
-
-  //   if (!result.canceled) {
-  //     setState(prevState => ({
-  //       ...prevState,
-  //       avatar: result.assets[0].uri,
-  //     }));
-  //   }
-  // };
-
-  const downloadAvatar = async () => {
-    try {
-      const permissionResult =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-      if (permissionResult.granted === false) {
-        alert(
-          "You refused to allow this app to access your photos"
-        );
-        return;
-      }
-
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      console.log('resultfoto', result);
-
-
-      setPickedImagePath(result.assets[0].uri);
-      console.log('setPickedImagePath', setPickedImagePath);
-
-    } catch (error) {
-      console.log("error-message", error.message);
-    }
-  };
-
-  const deleteAvatar = () => setPickedImagePath("");
 
   useEffect(() => {
     const onChange = () => {
@@ -126,25 +80,98 @@ export default function Registration({ navigation }) {
   const emailHandler = (email) => setEmail(email);
   const passwordHandler = (password) => setPassword(password);
 
-  const uploadPhotoToServer = async () => {
-    try {
-      const response = await fetch(pickedImagePath);
-      console.log('response', response);
-      const file = await response.blob();
-      console.log('file', file);
-      const uniquePostId = uuidv4();
-      // const storage = getStorage();
-      const storageRef = ref(storage, `avatarImage/${uniquePostId}`);
-      console.log('storageRef', storageRef);
+  const pickAvatar = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
 
-      await uploadBytes(storageRef, file);
-
-      const photoRef = await getDownloadURL(storageRef);
-      return photoRef;
-    } catch (error) {
-      console.log("error-message.upoload-photo", error.message);
+    if (!result.canceled) {
+      setState(prevState => ({
+        ...prevState,
+        avatar: result.assets[0].uri,
+      }));
     }
   };
+
+  const downloadAvatar = async () => {
+    try {
+      let imageRef;
+
+      if (state.avatar) {
+        const res = await fetch(state.avatar);
+        const file = await res.blob();
+        const uniqId = Date.now().toString();
+        imageRef = ref(storage, `userAvatars/${uniqId}`);
+        await uploadBytes(imageRef, file);
+      } else {
+        imageRef = ref(storage, `userAvatars/avatar_placeholder.jpg`);
+      }
+
+      const processedPhoto = await getDownloadURL(imageRef);
+      return processedPhoto;
+
+      // if (permissionResult.granted === false) {
+      //   alert(
+      //     "You refused to allow this app to access your photos"
+      //   );
+      //   return;
+      // }
+
+      // const result = await ImagePicker.launchImageLibraryAsync({
+      //   mediaTypes: ImagePicker.MediaTypeOptions.All,
+      //   allowsEditing: true,
+      //   aspect: [4, 3],
+      //   quality: 1,
+      // });
+      // console.log('resultfoto', result);
+
+
+      // setPickedImagePath(result.assets[0].uri);
+      // console.log('setPickedImagePath', setPickedImagePath);
+
+    } catch (error) {
+      console.log("error-message", error.message);
+    }
+  };
+
+  const deleteAvatar = () => {
+    setState(prevState => ({
+      ...prevState,
+      avatar: null,
+    }));
+  };
+
+
+  const submit = async () => {
+    const photo = await uploadPhotoToServer();
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    dispatch(authSignUpUser({ ...state, avatar: photo }));
+  }
+
+
+  // const uploadPhotoToServer = async () => {
+  //   try {
+  //     const response = await fetch(pickedImagePath);
+  //     console.log('response', response);
+  //     const file = await response.blob();
+  //     console.log('file', file);
+  //     const uniquePostId = uuidv4();
+  //     // const storage = getStorage();
+  //     const storageRef = ref(storage, `avatarImage/${uniquePostId}`);
+  //     console.log('storageRef', storageRef);
+
+  //     await uploadBytes(storageRef, file);
+
+  //     const photoRef = await getDownloadURL(storageRef);
+  //     return photoRef;
+  //   } catch (error) {
+  //     console.log("error-message.upoload-photo", error.message);
+  //   }
+  // };
   // const uploadPhotoToServer = async () => {
   //   let imageRef;
 
@@ -228,9 +255,6 @@ export default function Registration({ navigation }) {
       };
       console.log('newUser', newUser);
       dispatch(authSignUpUser(newUser))
-
-      // setState('');
-      // navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
 
     } catch (error) {
       Alert.alert(error.message);

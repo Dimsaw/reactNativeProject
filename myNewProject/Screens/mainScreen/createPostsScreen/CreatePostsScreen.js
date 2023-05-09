@@ -23,7 +23,7 @@ import * as Location from 'expo-location';
 import { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
 import { addDoc, collection } from 'firebase/firestore';
 
-import { storage, firestore } from '../../../firebase/firebase';
+import { storage, firestore } from '../../../firebase/config';
 
 const CreatePostsScreen = ({ route, navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);

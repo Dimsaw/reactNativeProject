@@ -8,52 +8,59 @@ import {
 
 import { Alert } from "react-native";
 
-import { auth } from "../../firebase/firebase";
+import { auth } from "../../firebase/config";
 
-import { authSlice } from "./authSlice";
-
-const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
+import {
+    updateUserProfile,
+    authStateChange,
+    authSignOut,
+    updateAvatar,
+    authError,
+} from "./authReducer";
 
 export const authSignUpUser =
-    ({ login, email, password }) =>
+    ({ login, email, password, avatar }) =>
         async (dispatch) => {
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
 
                 await updateProfile(auth.currentUser, {
                     displayName: login,
-
+                    photoURL: avatar,
                 });
 
-                const { uid, displayName } = auth.currentUser;
+                const { uid, displayName, photoURL } = auth.currentUser;
+                const userEmail = auth.currentUser.email;
 
                 dispatch(
                     updateUserProfile({
                         userId: uid,
                         login: displayName,
-                        email,
-
+                        avatar: photoURL,
+                        email: userEmail,
                     })
                 );
             } catch (error) {
-                Alert.alert(error.message);
+                dispatch(authError(error.message));
             }
         };
+
 export const authSignInUser =
     ({ email, password }) =>
-        async (dispatch, getState) => {
+        async (dispatch) => {
             try {
-                const user = await signInWithEmailAndPassword(auth, email, password);
+                await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
-                Alert.alert("Error! Email or password doesn't match!")
+                dispatch(authError(error.message));
             }
         };
-export const authSignOutUser = () => async (dispatch, getState) => {
+
+export const authSignOutUser = () => async dispatch => {
     try {
         await signOut(auth);
         dispatch(authSignOut());
     } catch (error) {
-        Alert.alert(error.message);
+        dispatch(authError(error.message));
     }
 };
 
@@ -61,11 +68,12 @@ export const authStateChangeUser = () => async (dispatch) => {
     await onAuthStateChanged(auth, (user) => {
         try {
             if (user) {
+                const { uid, displayName, photoURL, email } = auth.currentUser;
                 const userUpdateProfile = {
-                    email: user.email,
-                    avatarImage: user.photoURL,
-                    login: user.displayName,
-                    userId: user.uid,
+                    email,
+                    avatarImage: photoURL,
+                    login: displayName,
+                    userId: uid,
                 };
 
                 dispatch(updateUserProfile(userUpdateProfile));
@@ -75,4 +83,20 @@ export const authStateChangeUser = () => async (dispatch) => {
             Alert.alert(error.message);
         }
     });
+};
+
+export const updateUserAvatar = avatar => async dispatch => {
+    if (auth.currentUser) {
+        try {
+            await updateProfile(auth.currentUser, {
+                photoURL: avatar,
+            });
+
+            const { photoURL } = auth.currentUser;
+
+            dispatch(updateAvatar({ avatar: photoURL }));
+        } catch (error) {
+            dispatch(authError(error.message));
+        }
+    }
 };

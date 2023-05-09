@@ -16,10 +16,10 @@ import Header from '../components/Header/header'
 
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
-const log = false;
+const log = true;
 
-const Navigation = () => {
-  if (log) {
+const useRoute = isAuth => {
+  if (!isAuth) {
     return (
       <AuthStack.Navigator
         initialRouteName="Registration"
@@ -103,7 +103,7 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default useRoute;
 
 
 

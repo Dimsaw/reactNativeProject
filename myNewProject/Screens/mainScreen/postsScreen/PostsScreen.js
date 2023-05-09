@@ -3,9 +3,9 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { getHeaderTitle } from "@react-navigation/elements";
 
-import DefaultScreen from "../nestedScreen/DefaultScreen";
-import MapScreen from "../nestedScreen/MapScreen";
-import CommentsScreen from "../nestedScreen/CommentsScreen";
+import DefaultScreen from "../nestedScreen/defaultScreen/DefaultScreen";
+import MapScreen from "../nestedScreen/mapScreen/MapScreen";
+import CommentsScreen from "../nestedScreen/commentsScreen/CommentsScreen";
 
 import Header from "../../../components/Header/header.js";
 
