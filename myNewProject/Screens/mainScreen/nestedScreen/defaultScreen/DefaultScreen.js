@@ -1,7 +1,29 @@
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Image, TouchableOpacity, FlatList } from "react-native";
+import { useState, useEffect } from 'react';
+import { onSnapshot, collection, query, orderBy } from 'firebase/firestore';
+import { useSelector } from 'react-redux';
 
-const DefaultScreen = ({ navigation }) => {
+import { db } from '../../../../firebase/config';
+
+const DefaultScreen = ({ route, navigation }) => {
+    const [posts, setPosts] = useState([]);
+    const { login, email, userId } = useSelector(state => state.auth);
+
+    const getAllPosts = async () => {
+        const commentsQuery = query(
+            collection(db, 'posts'),
+            orderBy('createdAt', 'desc')
+        );
+
+        onSnapshot(commentsQuery, data => {
+            setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+        });
+    };
+
+    useEffect(() => {
+        getAllPosts();
+    }, []);
+
     return (
         <View style={styles.container}>
             <View style={styles.infoProfile}>
@@ -14,15 +36,23 @@ const DefaultScreen = ({ navigation }) => {
                     <Text style={styles.email}>email@example.com</Text>
                 </View>
             </View>
+            <FlatList
+                data={posts}
+                style={styles.postList}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                    <PostItem item={item} navigation={navigation} userId={userId} />
+                )}
+            />
 
-            <View style={styles.btnContainer}>
+            {/* <View style={styles.btnContainer}>
                 <TouchableOpacity style={styles.btnCamera} onPress={() => navigation.navigate("MapScreen")}>
                     <Text>Go to map</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btnCamera} onPress={() => navigation.navigate("CommentsScreen")}>
                     <Text>Go to comments</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </View>
     );
 };
@@ -60,6 +90,10 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         paddingTop: 16
+    },
+    postList: {
+        marginHorizontal: 16,
+        maxWidth: 360,
     }
 });
 

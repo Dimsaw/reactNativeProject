@@ -75,15 +75,15 @@ export default function Registration({ navigation }) {
   const pickAvatar = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [1, 1],
+        aspect: [4, 3],
         quality: 1,
       });
       console.log("result", result.assets[0].uri);
 
       if (!result.canceled) {
-        console.log("why464464646464646");
+        console.log("check//////////");
         setState((prevState) => ({
           ...prevState,
           avatar: result.assets[0].uri,
@@ -154,10 +154,11 @@ export default function Registration({ navigation }) {
         return alert("Please, fill all!");
       }
       dispatch(authSignUpUser({ ...state }));
-      setState("");
-      // const photo = await uploadPhotoToServer();
+
+      const photo = await uploadPhotoToServer();
       setIsShowKeyboard(false);
       Keyboard.dismiss();
+      setState("");
     } catch (error) {
       Alert.alert(error.message);
     }

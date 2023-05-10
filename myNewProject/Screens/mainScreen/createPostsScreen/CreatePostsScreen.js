@@ -34,10 +34,9 @@ const CreatePostsScreen = ({ route, navigation }) => {
   const [location, setLocation] = useState('');
   const [coords, setCoords] = useState(null);
   const [type, setType] = useState(CameraType.back);
-  const { nickName, userId } = useSelector(state => state.auth);
+  const { login, userId } = useSelector(state => state.auth);
   const [isDisabledPublish, setIsDisabledPublish] = useState(false);
 
-  const [titleLocation, setTitleLocation] = useState("");
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   const [titleBorderColor, setTitleBorderColor] = useState(false);
@@ -62,15 +61,18 @@ const CreatePostsScreen = ({ route, navigation }) => {
       : setIsDisabledPublish(false);
   }, [title, location, photo]);
 
-  const uploadPhotoToServer = async () => {
-    const res = await fetch(photo);
-    const file = await res.blob();
-    const uniqId = uuidv4();
-    const imageRef = ref(storage, `postImages/${uniqId}`);
-    await uploadBytes(imageRef, file);
-    const processedPhoto = await getDownloadURL(imageRef);
-    return processedPhoto;
-  };
+  // const uploadPhotoToServer = async () => {
+  //   const res = await fetch(photo);
+  //   console.log('res', res);
+  //   const file = await res.blob();
+  //   const uniqId = uuidv4();
+  //   const imageRef = ref(storage, `postImages/${uniqId}`);
+  //   console.log('imageRef', imageRef);
+  //   await uploadBytes(imageRef, file);
+  //   const processedPhoto = await getDownloadURL(imageRef);
+  //   console.log('processedPhoto', processedPhoto);
+  //   return processedPhoto;
+  // };
 
 
   const takePhoto = async () => {
@@ -85,15 +87,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
     }
   };
 
-  const sendPost = () => {
-    if (!photo || !title || !location) {
-      alert('Please fill in all fields!');
-      return;
-    }
 
-    uploadPostToServer();
-    navigation.navigate('DefaultScreen');
-  };
 
   const uploadPostToServer = async () => {
     const createdAt = uuidv4()
@@ -104,7 +98,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
       title,
       location,
       coords,
-      nickName,
+      login,
       userId,
       createdAt,
       likedBy: [],
@@ -131,6 +125,15 @@ const CreatePostsScreen = ({ route, navigation }) => {
     return <Text>No camera access</Text>;
   }
 
+  const sendPost = () => {
+    if (!photo || !title || !location) {
+      alert('Please fill in all fields!');
+      return;
+    }
+
+    uploadPostToServer();
+    navigation.navigate('DefaultScreen');
+  };
 
 
   // const sendPost = () => {
@@ -190,20 +193,11 @@ const CreatePostsScreen = ({ route, navigation }) => {
                 <FontAwesome5 name="camera" size={24} color="white" />
               </TouchableOpacity>
             </Camera>
-            {photo && <Image source={{ uri: photo }} style={styles.photo} />}
+            {photo && <Image source={{ uri: photo }} style={{ width: 200, height: 200, borderRadius: 10, borderColor: 'red' }} />}
           </View>
           <Text style={styles.cameraLabel}>
             {photo ? 'Edit photo' : 'Upload a photo'}
           </Text>
-          {/* const checkKeyboardPassword = () => {
-            setIsShowKeyboard(true);
-          setIsFocusedPassword(true);
-
-  };
-  const checkKeyboardEmail = () => {
-            setIsShowKeyboard(true);
-          setIsFocusedEmail(true)
-  }; */}
 
           <View style={{
             ...styles.form,
