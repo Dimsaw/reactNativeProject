@@ -110,7 +110,7 @@ export default function Registration({ navigation }) {
         console.log("res", res);
         const file = await res.blob();
         console.log("file", file);
-        const uniqId = Date.now().toString();
+        const uniqId = uuidv4();
         imageRef = ref(storage, `userAvatars/${uniqId}`);
         console.log("imageRef", imageRef);
         await uploadBytes(imageRef, file);

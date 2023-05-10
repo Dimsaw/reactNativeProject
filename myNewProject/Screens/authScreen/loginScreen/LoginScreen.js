@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { authSignInUser } from "../../../redux/auth/authOperation";
 
 import {
   StyleSheet,
@@ -15,6 +16,8 @@ import {
   Button,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+
 const initialState = {
   email: "",
   password: "",
@@ -24,8 +27,6 @@ const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
 
 export default function Login({ navigation }) {
-
-
   const [dimensions, setDimensions] = useState({
     window: windowDimensions,
     screen: screenDimensions,
@@ -44,15 +45,14 @@ export default function Login({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   // const [login, setLogin] = useState("");
   // const [email, setEmail] = useState("");
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState({ ...initialState });
 
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
 
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
-  // const loginHandler = (login) => setLogin(login);
-  // const emailHandler = (email) => setEmail(email);
+  const dispatch = useDispatch();
 
   const touchSreen = () => {
     setIsShowKeyboard(false);
@@ -62,19 +62,20 @@ export default function Login({ navigation }) {
   const checkKeyboardPassword = () => {
     setIsShowKeyboard(true);
     setIsFocusedPassword(true);
-
   };
   const checkKeyboardEmail = () => {
     setIsShowKeyboard(true);
-    setIsFocusedEmail(true)
+    setIsFocusedEmail(true);
   };
 
   const submitForm = () => {
-    if (!state.email || !state.password) { return alert("Please, fill all!") }
+    if (!state.email || !state.password) {
+      return alert("Please, fill all!");
+    }
     console.log(state);
-    setState('');
 
-    navigation.navigate('HomeScreen', { screen: 'PostsScreen' })
+    dispatch(authSignInUser({ ...state }));
+    setState("");
   };
 
   return (
@@ -117,16 +118,19 @@ export default function Login({ navigation }) {
                   value={state.password}
                   placeholder="Password"
                   secureTextEntry={isPasswordHidden}
-
                   onFocus={checkKeyboardPassword}
                   onChangeText={(value) =>
                     setState((prevState) => ({ ...prevState, password: value }))
                   }
                 />
-                <TouchableOpacity style={styles.toogleBtnPassword} activeOpacity={0.5} onPress={() =>
-                  setIsPasswordHidden((prevState) => !prevState)
-                }>
-                  <Text style={styles.toogleTextPassword}>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
+                <TouchableOpacity
+                  style={styles.toogleBtnPassword}
+                  activeOpacity={0.5}
+                  onPress={() => setIsPasswordHidden((prevState) => !prevState)}
+                >
+                  <Text style={styles.toogleTextPassword}>
+                    {isPasswordHidden ? "Show" : "Hide"}
+                  </Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.boxBtn}>
@@ -143,8 +147,6 @@ export default function Login({ navigation }) {
                   <Text style={styles.link}>No account? Registration</Text>
                 </TouchableOpacity>
               </View>
-
-
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
@@ -183,13 +185,13 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   toogleBtnPassword: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
     top: 80,
     paddingRight: 16,
   },
   toogleTextPassword: {
-    color: '#1B4371',
+    color: "#1B4371",
     fontSize: 16,
     fontFamily: "Roboto-Regular",
   },
@@ -222,12 +224,10 @@ const styles = StyleSheet.create({
   },
   boxBtn: {
     paddingBottom: 145,
-  }
-  ,
+  },
   link: {
     color: "#1B4371",
     textAlign: "center",
     fontSize: 16,
-
   },
 });
