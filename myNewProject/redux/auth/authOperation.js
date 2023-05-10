@@ -19,14 +19,14 @@ import {
 } from "./authReducer";
 
 export const authSignUpUser =
-    ({ login, email, password, avatar }) =>
+    ({ login, email, password }) =>
         async (dispatch) => {
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
 
                 await updateProfile(auth.currentUser, {
                     displayName: login,
-                    photoURL: avatar,
+                    // photoURL: avatar,
                 });
 
                 const { uid, displayName, photoURL } = auth.currentUser;
@@ -36,7 +36,7 @@ export const authSignUpUser =
                     updateUserProfile({
                         userId: uid,
                         login: displayName,
-                        avatar: photoURL,
+                        // avatar: photoURL,
                         email: userEmail,
                     })
                 );

@@ -21,7 +21,7 @@ import * as ImagePicker from "expo-image-picker";
 import { v4 as uuidv4 } from "uuid";
 import { AntDesign } from "@expo/vector-icons";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -30,9 +30,9 @@ import { storage } from "../../../firebase/config";
 import { authSignUpUser } from "../../../redux/auth/authOperation";
 
 const initialState = {
-  email: '',
-  password: '',
-  nickname: '',
+  email: "",
+  password: "",
+  nickname: "",
   avatar: null,
 };
 
@@ -48,19 +48,15 @@ export default function Registration({ navigation }) {
   );
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [state, setState] = useState(initialState);
-
-  const [pickedImagePath, setPickedImagePath] = useState(null)
-
-  const [login, setLogin] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [state, setState] = useState({ ...initialState });
 
   const [isFocusedLogin, setIsFocusedLogin] = useState(false);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
 
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+  const { error } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -76,35 +72,47 @@ export default function Registration({ navigation }) {
     return () => dimensionsHandler.remove();
   }, []);
 
-  const loginHandler = (login) => setLogin(login);
-  const emailHandler = (email) => setEmail(email);
-  const passwordHandler = (password) => setPassword(password);
-
   const pickAvatar = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+      console.log("result", result.assets[0].uri);
 
-    if (!result.canceled) {
-      setState(prevState => ({
-        ...prevState,
-        avatar: result.assets[0].uri,
-      }));
+      if (!result.canceled) {
+        console.log("why464464646464646");
+        setState((prevState) => ({
+          ...prevState,
+          avatar: result.assets[0].uri,
+        }));
+      }
+    } catch (error) {
+      Alert.alert(error.message);
     }
   };
 
-  const downloadAvatar = async () => {
+  const deleteAvatar = () => {
+    setState((prevState) => ({
+      ...prevState,
+      avatar: null,
+    }));
+  };
+
+  const uploadPhotoToServer = async () => {
     try {
       let imageRef;
 
       if (state.avatar) {
         const res = await fetch(state.avatar);
+        console.log("res", res);
         const file = await res.blob();
+        console.log("file", file);
         const uniqId = Date.now().toString();
         imageRef = ref(storage, `userAvatars/${uniqId}`);
+        console.log("imageRef", imageRef);
         await uploadBytes(imageRef, file);
       } else {
         imageRef = ref(storage, `userAvatars/avatar_placeholder.jpg`);
@@ -112,115 +120,10 @@ export default function Registration({ navigation }) {
 
       const processedPhoto = await getDownloadURL(imageRef);
       return processedPhoto;
-
-      // if (permissionResult.granted === false) {
-      //   alert(
-      //     "You refused to allow this app to access your photos"
-      //   );
-      //   return;
-      // }
-
-      // const result = await ImagePicker.launchImageLibraryAsync({
-      //   mediaTypes: ImagePicker.MediaTypeOptions.All,
-      //   allowsEditing: true,
-      //   aspect: [4, 3],
-      //   quality: 1,
-      // });
-      // console.log('resultfoto', result);
-
-
-      // setPickedImagePath(result.assets[0].uri);
-      // console.log('setPickedImagePath', setPickedImagePath);
-
     } catch (error) {
-      console.log("error-message", error.message);
+      Alert.alert(error.message);
     }
   };
-
-  const deleteAvatar = () => {
-    setState(prevState => ({
-      ...prevState,
-      avatar: null,
-    }));
-  };
-
-
-  const submit = async () => {
-    const photo = await uploadPhotoToServer();
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-    dispatch(authSignUpUser({ ...state, avatar: photo }));
-  }
-
-
-  // const uploadPhotoToServer = async () => {
-  //   try {
-  //     const response = await fetch(pickedImagePath);
-  //     console.log('response', response);
-  //     const file = await response.blob();
-  //     console.log('file', file);
-  //     const uniquePostId = uuidv4();
-  //     // const storage = getStorage();
-  //     const storageRef = ref(storage, `avatarImage/${uniquePostId}`);
-  //     console.log('storageRef', storageRef);
-
-  //     await uploadBytes(storageRef, file);
-
-  //     const photoRef = await getDownloadURL(storageRef);
-  //     return photoRef;
-  //   } catch (error) {
-  //     console.log("error-message.upoload-photo", error.message);
-  //   }
-  // };
-  // const uploadPhotoToServer = async () => {
-  //   let imageRef;
-
-  //   if (state.avatar) {
-  //     const res = await fetch(state.avatar);
-  //     const file = await res.blob();
-  //     const uniqId = Date.now().toString();
-  //     imageRef = ref(storage, `userAvatars/${uniqId}`);
-  //     await uploadBytes(imageRef, file);
-  //   } else {
-  //     imageRef = ref(storage, `userAvatars/avatar_placeholder.jpg`);
-  //   }
-
-  //   const processedPhoto = await getDownloadURL(imageRef);
-  //   return processedPhoto;
-  // };
-
-  // const submitForm = async () => {
-  //   try {
-  //     if (!login.trim() || !email.trim() || !password.trim()) {
-  //       Alert.alert(`All fields must be filled`);
-  //       return;
-  //     }
-
-  //     const imageRef = await uploadPhotoToServer();
-  //     const newUser = {
-  //       avatarImage: imageRef,
-  //       login,
-  //       email,
-  //       password,
-  //     };
-  //     console.log('user', user);
-  //     dispatch(authSignUpUser(newUser));
-  //     setLogin("");
-  //     setEmail("");
-  //     setPassword("");
-  //     setPickedImagePath("");
-  //     Keyboard.dismiss();
-  //   } catch (error) {
-  //     Alert.alert(error.message);
-  //   }
-  // };
-
-  useEffect(() => {
-    async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
-    }
-    prepare();
-  }, []);
 
   const touchSreen = () => {
     setIsShowKeyboard(false);
@@ -230,36 +133,34 @@ export default function Registration({ navigation }) {
   const checkKeyboardLogin = () => {
     setIsShowKeyboard(true);
     setIsFocusedLogin(true);
-
   };
   const checkKeyboardEmail = () => {
     setIsShowKeyboard(true);
-    setIsFocusedEmail(true)
+    setIsFocusedEmail(true);
   };
 
   const checkKeyboardPassword = () => {
     setIsShowKeyboard(true);
-    setIsFocusedPassword(true)
+    setIsFocusedPassword(true);
   };
 
   const submitForm = async () => {
     try {
-      if (!email.trim() || !password.trim() || !login.trim()) { return alert("Please, fill all!") }
-      // const imageRef = await uploadPhotoToServer();
-      // console.log('imageRef', imageRef);
-
-      const newUser = {
-        login,
-        email,
-        password,
-      };
-      console.log('newUser', newUser);
-      dispatch(authSignUpUser(newUser))
-
+      if (
+        !state.email.trim() ||
+        !state.password.trim() ||
+        !state.login.trim()
+      ) {
+        return alert("Please, fill all!");
+      }
+      dispatch(authSignUpUser({ ...state }));
+      setState("");
+      // const photo = await uploadPhotoToServer();
+      setIsShowKeyboard(false);
+      Keyboard.dismiss();
     } catch (error) {
       Alert.alert(error.message);
     }
-
   };
 
   return (
@@ -286,7 +187,7 @@ export default function Registration({ navigation }) {
                 marginBottom: isShowKeyboard ? -170 : 0,
               }}
             >
-              {pickedImagePath ? (
+              {state.avatar ? (
                 <>
                   <View
                     style={{
@@ -296,7 +197,7 @@ export default function Registration({ navigation }) {
                   >
                     <Image
                       style={styles.avatarImage}
-                      source={{ uri: pickedImagePath }}
+                      source={{ uri: state.avatar }}
                     />
                   </View>
                   <TouchableOpacity
@@ -318,7 +219,7 @@ export default function Registration({ navigation }) {
                     }}
                   ></View>
                   <TouchableOpacity
-                    onPress={downloadAvatar}
+                    onPress={pickAvatar}
                     style={{
                       ...styles.addButton,
                       left: windowWidth / 2 + 47.5,
@@ -337,9 +238,14 @@ export default function Registration({ navigation }) {
                   }}
                   onBlur={() => setIsFocusedLogin(false)}
                   cursorColor={"#BDBDBD"}
-                  onChangeText={loginHandler}
+                  value={state.login}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      login: value,
+                    }))
+                  }
                   textAlign={"left"}
-                  value={login}
                   placeholder="Login"
                   onFocus={checkKeyboardLogin}
                 />
@@ -350,9 +256,14 @@ export default function Registration({ navigation }) {
                   }}
                   onBlur={() => setIsFocusedEmail(false)}
                   cursorColor={"#BDBDBD"}
-                  onChangeText={emailHandler}
+                  value={state.email}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      email: value,
+                    }))
+                  }
                   textAlign={"left"}
-                  value={email}
                   placeholder="Email"
                   onFocus={checkKeyboardEmail}
                 />
@@ -363,18 +274,26 @@ export default function Registration({ navigation }) {
                   }}
                   onBlur={() => setIsFocusedPassword(false)}
                   cursorColor={"#BDBDBD"}
-                  onChangeText={passwordHandler}
+                  value={state.password}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({
+                      ...prevState,
+                      password: value,
+                    }))
+                  }
                   textAlign={"left"}
                   secureTextEntry={isPasswordHidden}
-                  value={password}
                   placeholder="Password"
                   onFocus={checkKeyboardPassword}
-
                 />
-                <TouchableOpacity style={styles.toogleBtnPassword} activeOpacity={0.5} onPress={() =>
-                  setIsPasswordHidden((prevState) => !prevState)
-                }>
-                  <Text style={styles.toogleTextPassword}>{isPasswordHidden ? 'Show' : 'Hide'}</Text>
+                <TouchableOpacity
+                  style={styles.toogleBtnPassword}
+                  activeOpacity={0.5}
+                  onPress={() => setIsPasswordHidden((prevState) => !prevState)}
+                >
+                  <Text style={styles.toogleTextPassword}>
+                    {isPasswordHidden ? "Show" : "Hide"}
+                  </Text>
                 </TouchableOpacity>
               </View>
 
@@ -441,28 +360,12 @@ const styles = StyleSheet.create({
   },
 
   menu: {
-    // flex: 1,
-    // alignItems: "center",
-    // backgroundColor: "#FFFFFF",
-    // borderTopLeftRadius: 25,
-    // borderTopRightRadius: 25,
     backgroundColor: "#FFFFFF",
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
-
-    // marginBottom: -50,
   },
 
   input: {
-    // marginBottom: 16,
-    // paddingHorizontal: 16,
-    // paddingTop: 16,
-    // paddingBottom: 15,
-    // backgroundColor: "#F6F6F6",
-    // height: 50,
-    // borderWidth: 1,
-    // borderRadius: 8,
-    // color: "#212121",
     borderWidth: 1,
     height: 50,
     borderRadius: 8,
@@ -495,13 +398,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   toogleBtnPassword: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
     top: 150,
     paddingRight: 16,
   },
   toogleTextPassword: {
-    color: '#1B4371',
+    color: "#1B4371",
     fontSize: 16,
     fontFamily: "Roboto-Regular",
   },
