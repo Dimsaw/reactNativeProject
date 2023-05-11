@@ -16,9 +16,10 @@ import {
   Alert,
 } from "react-native";
 
-import * as ImagePicker from "expo-image-picker";
-
+import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
+
+import * as ImagePicker from "expo-image-picker";
 import { AntDesign } from "@expo/vector-icons";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -80,10 +81,8 @@ export default function Registration({ navigation }) {
         aspect: [4, 3],
         quality: 1,
       });
-      console.log("result", result.assets[0].uri);
 
       if (!result.canceled) {
-        console.log("check//////////");
         setState((prevState) => ({
           ...prevState,
           avatar: result.assets[0].uri,
@@ -103,19 +102,17 @@ export default function Registration({ navigation }) {
 
   const uploadPhotoToServer = async () => {
     try {
-      let imageRef;
-
+      let imageRef
       if (state.avatar) {
+
         const res = await fetch(state.avatar);
-        console.log("res", res);
         const file = await res.blob();
-        console.log("file", file);
         const uniqId = uuidv4();
         imageRef = ref(storage, `userAvatars/${uniqId}`);
-        console.log("imageRef", imageRef);
         await uploadBytes(imageRef, file);
       } else {
         imageRef = ref(storage, `userAvatars/avatar_placeholder.jpg`);
+        console.log("imageRef2", imageRef);
       }
 
       const processedPhoto = await getDownloadURL(imageRef);

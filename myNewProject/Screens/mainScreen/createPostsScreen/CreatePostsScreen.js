@@ -61,18 +61,18 @@ const CreatePostsScreen = ({ route, navigation }) => {
       : setIsDisabledPublish(false);
   }, [title, location, photo]);
 
-  // const uploadPhotoToServer = async () => {
-  //   const res = await fetch(photo);
-  //   console.log('res', res);
-  //   const file = await res.blob();
-  //   const uniqId = uuidv4();
-  //   const imageRef = ref(storage, `postImages/${uniqId}`);
-  //   console.log('imageRef', imageRef);
-  //   await uploadBytes(imageRef, file);
-  //   const processedPhoto = await getDownloadURL(imageRef);
-  //   console.log('processedPhoto', processedPhoto);
-  //   return processedPhoto;
-  // };
+  const uploadPhotoToServer = async () => {
+    const res = await fetch(photo);
+    console.log('res', res);
+    const file = await res.blob();
+    const uniqId = uuidv4();
+    const imageRef = ref(storage, `postImages/${uniqId}`);
+    console.log('imageRef', imageRef);
+    await uploadBytes(imageRef, file);
+    const processedPhoto = await getDownloadURL(imageRef);
+    console.log('processedPhoto', processedPhoto);
+    return processedPhoto;
+  };
 
 
   const takePhoto = async () => {
