@@ -23,7 +23,7 @@ import * as Location from 'expo-location';
 import { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
 import { addDoc, collection } from 'firebase/firestore';
 
-import { storage, firestore } from '../../../firebase/config';
+import { storage, db } from '../../../firebase/config';
 
 const CreatePostsScreen = ({ route, navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -62,48 +62,62 @@ const CreatePostsScreen = ({ route, navigation }) => {
   }, [title, location, photo]);
 
   const uploadPhotoToServer = async () => {
-    const res = await fetch(photo);
-    console.log('res', res);
-    const file = await res.blob();
-    const uniqId = uuidv4();
-    const imageRef = ref(storage, `postImages/${uniqId}`);
-    console.log('imageRef', imageRef);
-    await uploadBytes(imageRef, file);
-    const processedPhoto = await getDownloadURL(imageRef);
-    console.log('processedPhoto', processedPhoto);
-    return processedPhoto;
+    try {
+      const res = await fetch(photo);
+      console.log('res', res);
+      const file = await res.blob();
+      const uniqId = uuidv4();
+      const imageRef = ref(storage, `postImages/${uniqId}`);
+      console.log('imageRef', imageRef);
+      await uploadBytes(imageRef, file);
+      const processedPhoto = await getDownloadURL(imageRef);
+      console.log('processedPhoto', processedPhoto);
+      return processedPhoto;
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+
   };
 
 
   const takePhoto = async () => {
-    if (camera) {
-      const { uri } = await camera.takePictureAsync();
-      const { coords } = await Location.getCurrentPositionAsync();
-      await MediaLibrary.createAssetAsync(uri);
-      setCoords(coords);
-      setPhoto(uri);
-      console.log("photo", uri);
-      console.log("coords", coords);
+    try {
+      if (camera) {
+        const { uri } = await camera.takePictureAsync();
+        const { coords } = await Location.getCurrentPositionAsync();
+        await MediaLibrary.createAssetAsync(uri);
+        setCoords(coords);
+        setPhoto(uri);
+        console.log("photo", uri);
+        console.log("coords", coords);
+      }
+    } catch (error) {
+      Alert.alert(error.message);
     }
+
   };
 
 
 
   const uploadPostToServer = async () => {
-    const createdAt = uuidv4()
-    const photo = await uploadPhotoToServer();
+    try {
+      const createdAt = uuidv4()
+      const photo = await uploadPhotoToServer();
 
-    await addDoc(collection(firestore, `posts`), {
-      photo,
-      title,
-      location,
-      coords,
-      login,
-      userId,
-      createdAt,
-      likedBy: [],
-    });
-    resetPost()
+      await addDoc(collection(db, `posts`), {
+        photo,
+        title,
+        location,
+        coords,
+        login,
+        userId,
+        createdAt,
+        likedBy: [],
+      });
+      resetPost()
+    } catch (error) {
+      Alert.alert(error.message);
+    }
   };
 
   const resetPost = () => {

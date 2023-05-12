@@ -48,7 +48,7 @@ const PostItem = ({ item, navigation, userId }) => {
                 <View style={styles.commentWrapper}>
                     <TouchableOpacity
                         onPress={() =>
-                            navigation.navigate('Comments', {
+                            navigation.navigate('CommentsScreen', {
                                 postId: id,
                                 photo: photo,
                             })
@@ -78,7 +78,7 @@ const PostItem = ({ item, navigation, userId }) => {
                     <TouchableOpacity
                         style={styles.locationBtn}
                         onPress={() =>
-                            navigation.navigate('Map', {
+                            navigation.navigate('MapScreen', {
                                 location: coords,
                                 title: title,
                             })

@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { onSnapshot, collection, query, orderBy } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
 
+import PostItem from '../../../../components/postItem/postItem'
+
 import { db } from '../../../../firebase/config';
 
 const DefaultScreen = ({ route, navigation }) => {
@@ -71,6 +73,7 @@ const styles = StyleSheet.create({
     },
     infoProfile: {
         flexDirection: "row",
+        marginBottom: 25,
     },
     athorInfo: {
         flex: 1,
