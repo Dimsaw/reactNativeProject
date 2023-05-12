@@ -68,12 +68,12 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#FFFFFF",
 
-        paddingLeft: 16,
-        paddingRight: 16,
     },
     infoProfile: {
         flexDirection: "row",
         marginBottom: 25,
+        marginHorizontal: 16
+
     },
     athorInfo: {
         flex: 1,
