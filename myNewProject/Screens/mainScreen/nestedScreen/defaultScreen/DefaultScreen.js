@@ -7,7 +7,9 @@ import { db } from '../../../../firebase/config';
 
 const DefaultScreen = ({ route, navigation }) => {
     const [posts, setPosts] = useState([]);
-    const { login, email, userId } = useSelector(state => state.auth);
+    const { avatar, login, email, userId } = useSelector(state => state.auth);
+    console.log('avatar', avatar);
+
 
     const getAllPosts = async () => {
         const commentsQuery = query(
@@ -29,11 +31,11 @@ const DefaultScreen = ({ route, navigation }) => {
             <View style={styles.infoProfile}>
                 <Image
                     style={styles.avatar}
-                    source={require("../../../../images/smallAvatar.jpg")}
+                    source={{ uri: avatar }}
                 />
                 <View style={styles.athorInfo}>
-                    <Text style={styles.name}>Natalia Romanova</Text>
-                    <Text style={styles.email}>email@example.com</Text>
+                    <Text style={styles.name}>{login}</Text>
+                    <Text style={styles.email}> {email} </Text>
                 </View>
             </View>
             <FlatList

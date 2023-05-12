@@ -50,6 +50,9 @@ export const authSignInUser =
         async (dispatch) => {
             try {
                 await signInWithEmailAndPassword(auth, email, password);
+
+
+
             } catch (error) {
                 dispatch(authError(error.message));
             }
@@ -71,7 +74,7 @@ export const authStateChangeUser = () => async (dispatch) => {
                 const { uid, displayName, photoURL, email } = auth.currentUser;
                 const userUpdateProfile = {
                     email,
-                    avatarImage: photoURL,
+                    avatar: photoURL,
                     login: displayName,
                     userId: uid,
                 };
