@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -21,8 +22,11 @@ export const Main = ({ onReady }) => {
     console.log('routing', routing);
 
     return (
+
         <NavigationContainer onReady={onReady}>
             {routing}
         </NavigationContainer>
+
+
     )
 }

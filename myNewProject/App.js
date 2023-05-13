@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Provider } from "react-redux";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
@@ -16,6 +17,7 @@ LogBox.ignoreAllLogs();
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
+
   const [fontsLoaded] = useFonts({
     "Roboto-Medium": require("./fonts/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./fonts/Roboto-Regular.ttf"),
