@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { useState, useEffect } from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
 import {
     arrayRemove,
     arrayUnion,
@@ -8,9 +8,9 @@ import {
     onSnapshot,
     updateDoc,
     doc,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
-import { db } from '../../firebase/config';
+import { db } from "../../firebase/config";
 
 const PostItem = ({ item, navigation, userId }) => {
     const [commentCount, setCommentCount] = useState([]);
@@ -22,7 +22,7 @@ const PostItem = ({ item, navigation, userId }) => {
     }, []);
 
     const getCommentCount = async () => {
-        onSnapshot(collection(db, `posts/${id}/comments`), data => {
+        onSnapshot(collection(db, `posts/${id}/comments`), (data) => {
             setCommentCount(data.size);
         });
     };
@@ -48,7 +48,7 @@ const PostItem = ({ item, navigation, userId }) => {
                 <View style={styles.commentWrapper}>
                     <TouchableOpacity
                         onPress={() =>
-                            navigation.navigate('CommentsScreen', {
+                            navigation.navigate("CommentsScreen", {
                                 postId: id,
                                 photo: photo,
                             })
@@ -58,7 +58,7 @@ const PostItem = ({ item, navigation, userId }) => {
                             style={styles.commentIcon}
                             name="message-circle"
                             size={24}
-                            color={commentCount > 0 ? '#FF6C00' : '#BDBDBD'}
+                            color={commentCount > 0 ? "#FF6C00" : "#BDBDBD"}
                         />
                     </TouchableOpacity>
                     <Text style={styles.socialsText}>{commentCount}</Text>
@@ -69,7 +69,7 @@ const PostItem = ({ item, navigation, userId }) => {
                             style={styles.likeIcon}
                             name="thumbs-up"
                             size={24}
-                            color={likedBy.includes(userId) ? '#FF6C00' : '#BDBDBD'}
+                            color={likedBy.includes(userId) ? "#FF6C00" : "#BDBDBD"}
                         />
                     </TouchableOpacity>
                     <Text style={styles.socialsText}>{likedBy.length}</Text>
@@ -78,7 +78,7 @@ const PostItem = ({ item, navigation, userId }) => {
                     <TouchableOpacity
                         style={styles.locationBtn}
                         onPress={() =>
-                            navigation.navigate('MapScreen', {
+                            navigation.navigate("MapScreen", {
                                 location: coords,
                                 title: title,
                             })
@@ -100,57 +100,57 @@ const PostItem = ({ item, navigation, userId }) => {
 
 const styles = StyleSheet.create({
     listItem: {
-        width: '100%',
+        width: "100%",
         marginBottom: 32,
     },
 
     img: {
         height: 240,
-        width: '100%',
+        width: "100%",
         marginBottom: 8,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: '#E8E8E8',
+        borderColor: "#E8E8E8",
     },
 
     postTitle: {
         marginBottom: 8,
         fontSize: 16,
         lineHeight: 19,
-        color: '#212121',
-        fontWeight: '500',
-        fontFamily: 'Roboto-Medium',
-        textAlign: 'left',
+        color: "#212121",
+        fontWeight: "500",
+        fontFamily: "Roboto-Medium",
+        textAlign: "left",
     },
 
     postInfo: {
-        display: 'flex',
-        flexDirection: 'row',
+        display: "flex",
+        flexDirection: "row",
     },
 
     socialsText: {
         fontSize: 16,
         lineHeight: 19,
-        color: '#212121',
-        fontFamily: 'Roboto-Regular',
+        color: "#212121",
+        fontFamily: "Roboto-Regular",
     },
 
     commentWrapper: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
         marginRight: 24,
     },
 
     commentIcon: {
-        transform: [{ rotate: '-90deg' }],
+        transform: [{ rotate: "-90deg" }],
         marginRight: 8,
     },
 
     likeWrapper: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
     },
 
     likeIcon: {
@@ -158,13 +158,13 @@ const styles = StyleSheet.create({
     },
 
     locationWrapper: {
-        marginLeft: 'auto',
+        marginLeft: "auto",
     },
 
     locationBtn: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
     },
 
     locationIcon: {
@@ -174,13 +174,12 @@ const styles = StyleSheet.create({
     locationText: {
         fontSize: 16,
         lineHeight: 19,
-        color: '#212121',
-        textDecorationStyle: 'solid',
-        textDecorationLine: 'underline',
-        textDecorationColor: '#212121',
-        fontFamily: 'Roboto-Regular',
+        color: "#212121",
+        textDecorationStyle: "solid",
+        textDecorationLine: "underline",
+        textDecorationColor: "#212121",
+        fontFamily: "Roboto-Regular",
     },
 });
-
 
 export default PostItem;

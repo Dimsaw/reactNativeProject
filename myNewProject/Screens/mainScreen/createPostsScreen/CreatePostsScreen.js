@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import {
   Text,
   View,
@@ -11,38 +11,40 @@ import {
   TouchableWithoutFeedback,
   Platform,
   StyleSheet,
-  Alert
-} from 'react-native';
+  Alert,
+} from "react-native";
 
-import { FontAwesome5, Feather } from '@expo/vector-icons';
+import { FontAwesome5, Feather } from "@expo/vector-icons";
 import { v4 as uuidv4 } from "uuid";
 
-import { Camera, CameraType } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
-import * as Location from 'expo-location';
-import { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
-import { addDoc, collection } from 'firebase/firestore';
+import { Camera, CameraType } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
 
-import { storage, db } from '../../../firebase/config';
+import { storage, db } from "../../../firebase/config";
 
 const CreatePostsScreen = ({ route, navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
 
   const [camera, setCamera] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [title, setTitle] = useState('');
-  const [location, setLocation] = useState('');
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
   const [coords, setCoords] = useState(null);
   const [type, setType] = useState(CameraType.back);
-  const { login, userId } = useSelector(state => state.auth);
+  const { login, userId } = useSelector((state) => state.auth);
   const [isDisabledPublish, setIsDisabledPublish] = useState(false);
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   const [titleBorderColor, setTitleBorderColor] = useState(false);
   const [titleBackgroundColor, setTitleBackgroundColor] = useState(false);
-  const [titleLocationBorderColor, setTitleLocationBorderColor] = useState(false);
-  const [titleLocationBackgroundColor, setTitleLocationBackgroundColor] = useState(false);
+  const [titleLocationBorderColor, setTitleLocationBorderColor] =
+    useState(false);
+  const [titleLocationBackgroundColor, setTitleLocationBackgroundColor] =
+    useState(false);
 
   useEffect(() => {
     (async () => {
@@ -51,7 +53,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
       await MediaLibrary.requestPermissionsAsync();
       await Location.requestForegroundPermissionsAsync();
 
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     })();
   }, []);
 
@@ -64,21 +66,19 @@ const CreatePostsScreen = ({ route, navigation }) => {
   const uploadPhotoToServer = async () => {
     try {
       const res = await fetch(photo);
-      console.log('res', res);
+      console.log("res", res);
       const file = await res.blob();
       const uniqId = uuidv4();
       const imageRef = ref(storage, `postImages/${uniqId}`);
-      console.log('imageRef', imageRef);
+      console.log("imageRef", imageRef);
       await uploadBytes(imageRef, file);
       const processedPhoto = await getDownloadURL(imageRef);
-      console.log('processedPhoto', processedPhoto);
+      console.log("processedPhoto", processedPhoto);
       return processedPhoto;
     } catch (error) {
       Alert.alert(error.message);
     }
-
   };
-
 
   const takePhoto = async () => {
     try {
@@ -94,14 +94,11 @@ const CreatePostsScreen = ({ route, navigation }) => {
     } catch (error) {
       Alert.alert(error.message);
     }
-
   };
-
-
 
   const uploadPostToServer = async () => {
     try {
-      const createdAt = uuidv4()
+      const createdAt = uuidv4();
       const photo = await uploadPhotoToServer();
 
       await addDoc(collection(db, `posts`), {
@@ -114,7 +111,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
         createdAt,
         likedBy: [],
       });
-      resetPost()
+      resetPost();
     } catch (error) {
       Alert.alert(error.message);
     }
@@ -122,8 +119,8 @@ const CreatePostsScreen = ({ route, navigation }) => {
 
   const resetPost = () => {
     setPhoto(null);
-    setTitle('');
-    setLocation('');
+    setTitle("");
+    setLocation("");
     setCoords(null);
   };
 
@@ -141,48 +138,13 @@ const CreatePostsScreen = ({ route, navigation }) => {
 
   const sendPost = () => {
     if (!photo || !title || !location) {
-      alert('Please fill in all fields!');
+      alert("Please fill in all fields!");
       return;
     }
 
     uploadPostToServer();
-    navigation.navigate('DefaultScreen');
+    navigation.navigate("DefaultScreen");
   };
-
-
-  // const sendPost = () => {
-  //   setIsShowKeyboard(false);
-  //   Keyboard.dismiss();
-  //   // console.log("title:", title);
-  //   const post = {
-  //     photo,
-  //     title,
-  //     titleLocation,
-  //     location,
-  //   }
-  //   // console.log(post)
-  //   navigation.navigate("DefaultProfileScreen", post)
-  //   setPhoto("");
-  //   setTitle("");
-  //   setTitleLocation("")
-  //   setLocation(null);
-  // };
-
-  // useEffect(() => {
-  //   (async () => {
-  //     let { status } = await Location.requestForegroundPermissionsAsync();
-  //     if (status !== 'granted') {
-  //       setErrorMsg('Permission to access location was denied');
-  //       return;
-  //     }
-
-  //     let location = await Location.getCurrentPositionAsync({});
-  //     setLocation(location);
-  //     // console.log("latitude",location.coords.latitude)
-  //     // console.log("longitude",location.coords.longitude)
-
-  //   })();
-  // }, []);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -190,12 +152,16 @@ const CreatePostsScreen = ({ route, navigation }) => {
   };
 
   return (
-
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={{ ...styles.container, marginVertical: isShowKeyboard ? -30 : 0, }}>
+      <View
+        style={{
+          ...styles.container,
+          marginVertical: isShowKeyboard ? -30 : 0,
+        }}
+      >
         <KeyboardAvoidingView
           style={{ flex: 1 }}
-          behavior={Platform.OS === 'ios' && 'padding'}
+          behavior={Platform.OS === "ios" && "padding"}
         >
           <View style={styles.cameraWrapper}>
             <Camera style={styles.camera} ref={setCamera} type={type}>
@@ -207,26 +173,40 @@ const CreatePostsScreen = ({ route, navigation }) => {
                 <FontAwesome5 name="camera" size={24} color="white" />
               </TouchableOpacity>
             </Camera>
-            {photo && <Image source={{ uri: photo }} style={{ width: 200, height: 200, borderRadius: 10, borderColor: 'red' }} />}
+            {photo && (
+              <Image
+                source={{ uri: photo }}
+                style={{
+                  width: 200,
+                  height: 200,
+                  borderRadius: 10,
+                  borderColor: "red",
+                }}
+              />
+            )}
           </View>
           <Text style={styles.cameraLabel}>
-            {photo ? 'Edit photo' : 'Upload a photo'}
+            {photo ? "Edit photo" : "Upload a photo"}
           </Text>
 
-          <View style={{
-            ...styles.form,
-            marginVertical: isShowKeyboard ? -30 : 0,
-          }}>
+          <View
+            style={{
+              ...styles.form,
+              marginVertical: isShowKeyboard ? -30 : 0,
+            }}
+          >
             <TextInput
               style={{
                 ...styles.titleInput,
                 borderColor: titleBorderColor ? "#FF6C00" : "#F6F6F6",
-                backgroundColor: titleBackgroundColor ? 'transparent' : '#F6F6F6'
+                backgroundColor: titleBackgroundColor
+                  ? "transparent"
+                  : "#F6F6F6",
               }}
               onSubmitEditing={() => Keyboard.dismiss()}
               placeholder="Namе..."
               placeholderTextColor="#BDBDBD"
-              onChangeText={value => setTitle(value)}
+              onChangeText={(value) => setTitle(value)}
               value={title}
               onFocus={() => {
                 setTitleBorderColor(true);
@@ -236,20 +216,22 @@ const CreatePostsScreen = ({ route, navigation }) => {
               onBlur={() => {
                 setTitleBackgroundColor(false);
                 setTitleBorderColor(false);
-                setIsShowKeyboard(false)
+                setIsShowKeyboard(false);
               }}
             />
-            <View style={{ position: 'relative' }}>
+            <View style={{ position: "relative" }}>
               <TextInput
                 style={{
                   ...styles.locationInput,
                   borderColor: titleLocationBorderColor ? "#FF6C00" : "#F6F6F6",
-                  backgroundColor: titleLocationBackgroundColor ? 'transparent' : '#F6F6F6'
+                  backgroundColor: titleLocationBackgroundColor
+                    ? "transparent"
+                    : "#F6F6F6",
                 }}
                 onSubmitEditing={() => Keyboard.dismiss()}
                 placeholder="Location..."
                 placeholderTextColor="#BDBDBD"
-                onChangeText={value => setLocation(value)}
+                onChangeText={(value) => setLocation(value)}
                 value={location}
                 onFocus={() => {
                   setTitleLocationBackgroundColor(true);
@@ -259,7 +241,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
                 onBlur={() => {
                   setTitleLocationBorderColor(false);
                   setTitleLocationBackgroundColor(false);
-                  setIsShowKeyboard(false)
+                  setIsShowKeyboard(false);
                 }}
               />
               <Feather
@@ -273,7 +255,7 @@ const CreatePostsScreen = ({ route, navigation }) => {
             <TouchableOpacity
               style={{
                 ...styles.btn,
-                backgroundColor: isDisabledPublish ? '#FF6C00' : '#F6F6F6',
+                backgroundColor: isDisabledPublish ? "#FF6C00" : "#F6F6F6",
               }}
               activeOpacity={0.9}
               onPress={sendPost}
@@ -281,127 +263,45 @@ const CreatePostsScreen = ({ route, navigation }) => {
               <Text
                 style={{
                   ...styles.btnLabel,
-                  color: isDisabledPublish ? '#FFFFFF' : '#BDBDBD',
+                  color: isDisabledPublish ? "#FFFFFF" : "#BDBDBD",
                 }}
               >
                 Publish
               </Text>
             </TouchableOpacity>
-
           </View>
 
-          <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+          <View style={{ flex: 1, justifyContent: "flex-end" }}>
             <TouchableOpacity
               onPress={resetPost}
               style={{
                 ...styles.trashBtn,
-                backgroundColor: photo ? '#FF6C00' : '#F6F6F6',
+                backgroundColor: photo ? "#FF6C00" : "#F6F6F6",
                 marginBottom: isShowKeyboard ? 0 : 32,
               }}
             >
               <Feather
                 name="trash"
                 size={24}
-                color={photo ? '#ffffff' : '#bdbdbd'}
+                color={photo ? "#ffffff" : "#bdbdbd"}
               />
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 };
-
-
-//   <TouchableWithoutFeedback onPress={keyboardHide}>
-//     <View style={styles.container}>
-//       <Camera style={styles.camera} ref={setCamera}>
-//         {photo && (
-//           <View style={styles.takePhotoContainer}>
-//             <Image
-//               source={{ uri: photo }}
-//               style={{ height: 200, width: 200 }}
-//             />
-//           </View>
-//         )}
-//         <View style={styles.btnContainer}>
-//           <TouchableOpacity style={styles.btnCamera} onPress={takePhoto}>
-//             <FontAwesome name="camera" size={24} color="#BDBDBD" />
-//           </TouchableOpacity>
-//         </View>
-//       </Camera>
-//       <View
-//         style={{
-//           ...styles.form,
-//           marginBottom: isShowKeyboard ? -90 : 179,
-//         }}
-//       >
-//         <View>
-//           <TextInput
-//             style={{
-//               ...styles.input,
-//               borderColor: titleBorderColor,
-//               backgroundColor: titleBackgroundColor,
-//             }}
-//             value={title}
-//             onChangeText={(value) => setTitle(value)}
-//             placeholder={"Title"}
-//             onFocus={() => {
-//               setTitleBorderColor("#FF6C00");
-//               setTitleBackgroundColor("transparent");
-//               setIsShowKeyboard(true);
-//             }}
-//             onBlur={() => {
-//               setTitleBackgroundColor("#F6F6F6");
-//               setTitleBorderColor("#E8E8E8");
-//             }}
-//           />
-//         </View>
-//         <View>
-
-//           <TextInput
-
-//             style={{
-//               ...styles.input,
-//               borderColor: titleLocationBorderColor,
-//               backgroundColor: titleLocationBackgroundColor,
-//             }}
-//             value={titleLocation}
-//             onChangeText={(value) => setTitleLocation(value)}
-//             placeholder={" Location"}
-//             onFocus={() => {
-//               setTitleLocationBorderColor("#FF6C00");
-//               setTitleLocationBackgroundColor("transparent");
-//               setIsShowKeyboard(true);
-//             }}
-//             onBlur={() => {
-//               setTitleLocationBackgroundColor("#F6F6F6");
-//               setTitleLocationBorderColor("#E8E8E8");
-//             }}
-//           />
-//         </View>
-//         <TouchableOpacity
-//           style={styles.btn}
-//           activeOpacity={0.7}
-//           onPress={sendPost}
-//         >
-//           <Text style={styles.btnTitle}>Publish</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
-//   </TouchableWithoutFeedback>
-//   );
-// };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
 
   cameraWrapper: {
-    alignSelf: 'center',
-    position: 'relative',
+    alignSelf: "center",
+    position: "relative",
     height: 240,
     width: 360,
     marginHorizontal: 16,
@@ -409,33 +309,33 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E8E8E8',
-    overflow: 'hidden',
+    borderColor: "#E8E8E8",
+    overflow: "hidden",
   },
 
   camera: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   photoBtn: {
-    position: 'absolute',
+    position: "absolute",
     width: 60,
     height: 60,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 100,
   },
 
   photo: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: 15,
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%",
   },
 
   cameraLabel: {
@@ -443,13 +343,12 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     fontSize: 16,
     lineHeight: 19,
-    fontFamily: 'Roboto-Regular',
-    color: '#bdbdbd',
+    fontFamily: "Roboto-Regular",
+    color: "#bdbdbd",
   },
 
   form: {
     marginHorizontal: 16,
-
   },
 
   titleInput: {
@@ -457,7 +356,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 16,
     lineHeight: 19,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
     borderBottomWidth: 1,
   },
 
@@ -466,140 +365,37 @@ const styles = StyleSheet.create({
     paddingLeft: 28,
     fontSize: 16,
     lineHeight: 19,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
     borderBottomWidth: 1,
   },
 
   locationIcon: {
-    position: 'absolute',
+    position: "absolute",
     top: 16,
-    color: '#bdbdbd',
+    color: "#bdbdbd",
   },
 
   btn: {
     height: 51,
     marginTop: 43,
     borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   btnLabel: {
-    color: '#f0f8ff',
+    color: "#f0f8ff",
     fontSize: 16,
     lineHeight: 19,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
   },
 
   trashBtn: {
     width: 70,
     height: 40,
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
   },
 });
-
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#FFFFFF",
-//     fontFamily: "Roboto-Regular",
-//   },
-//   camera: {
-//     marginTop: 32,
-//     marginRight: 16,
-//     marginLeft: 16,
-//     borderRadius: 8,
-//     height: 240,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   foto: {},
-//   btnContainer: {
-//     width: 60,
-//     height: 60,
-//     borderColor: "#FFFFFF",
-//     borderWidth: 1,
-//     borderRadius: "50%",
-//     justifyContent: "center",
-//     alignItems: "center",
-//     backgroundColor: "#FFFFFF",
-//   },
-//   btnCamera: {},
-//   addFoto: {
-//     marginLeft: 16,
-//     marginTop: 8,
-//   },
-//   takePhotoContainer: {
-//     position: "absolute",
-//     top: 0,
-//     left: 0,
-//     borderColor: "#fff",
-//     borderWidth: 1,
-//   },
-//   input: {
-//     borderBottomWidth: 1,
-//     height: 50,
-//     borderRadius: 8,
-//     borderColor: "#E8E8E8",
-//     marginHorizontal: 16,
-//     marginBottom: 16,
-//     paddingLeft: 16,
-//   },
-//   textLocation: {
-//     paddingLeft: 6,
-//   },
-//   pointLocation: {
-//     borderBottomWidth: 1,
-//     height: 50,
-//     borderRadius: 8,
-//     borderColor: "#E8E8E8",
-//     marginHorizontal: 16,
-//     marginBottom: 16,
-
-//     flexDirection: "row",
-
-//     paddingTop: 15,
-//   },
-
-//   btn: {
-//     borderWidth: 1,
-//     height: 50,
-//     borderRadius: 100,
-//     backgroundColor: "#F6F6F6",
-//     borderColor: "#ffffff",
-//     marginHorizontal: 16,
-//     marginTop: 27,
-//     marginBottom: 16,
-//     paddingLeft: 16,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-//   btnText: {
-//     color: "#BDBDBD",
-//     fontSize: 16,
-//   },
-//   btnDelete: {
-//     flex: 1,
-//     flexDirection: "column-reverse",
-//     alignItems: "center",
-//   },
-//   btnTrashBin: {
-//     justifyContent: "center",
-//     alignItems: "center",
-//     width: 70,
-//     height: 40,
-//     backgroundColor: "#F6F6F6",
-//     borderRadius: 20,
-//     marginBottom: 36,
-//   },
-// });
-
-export default CreatePostsScreen;
-
-
-
-

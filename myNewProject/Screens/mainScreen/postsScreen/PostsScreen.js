@@ -18,7 +18,7 @@ const PostsScreen = () => {
                 name="DefaultScreen"
                 component={DefaultScreen}
                 options={{
-                    headerTitle: 'Post',
+                    headerTitle: "Post",
                     header: ({ navigation, route, options, back }) => {
                         const title = getHeaderTitle(options, route.name);
                         return <Header title={title} navigation={navigation} back={back} />;
@@ -29,7 +29,7 @@ const PostsScreen = () => {
                 name="MapScreen"
                 component={MapScreen}
                 options={{
-                    headerTitle: 'Map',
+                    headerTitle: "Map",
                     header: ({ navigation, route, options, back }) => {
                         const title = getHeaderTitle(options, route.name);
                         return <Header title={title} navigation={navigation} back={back} />;
@@ -40,7 +40,7 @@ const PostsScreen = () => {
                 name="CommentsScreen"
                 component={CommentsScreen}
                 options={{
-                    headerTitle: 'Comments',
+                    headerTitle: "Comments",
                     header: ({ navigation, route, options, back }) => {
                         const title = getHeaderTitle(options, route.name);
                         return <Header title={title} navigation={navigation} back={back} />;
@@ -52,4 +52,3 @@ const PostsScreen = () => {
 };
 
 export default PostsScreen;
-

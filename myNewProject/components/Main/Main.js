@@ -6,10 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import useRoute from "../../routing/routing";
 import { authStateChangeUser } from "../../redux/auth/authOperation";
 
-
 export const Main = ({ onReady }) => {
-
-
     const { stateChange } = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
@@ -19,14 +16,7 @@ export const Main = ({ onReady }) => {
     }, []);
 
     const routing = useRoute(stateChange);
-    console.log('routing', routing);
+    console.log("routing", routing);
 
-    return (
-
-        <NavigationContainer onReady={onReady}>
-            {routing}
-        </NavigationContainer>
-
-
-    )
-}
+    return <NavigationContainer onReady={onReady}>{routing}</NavigationContainer>;
+};

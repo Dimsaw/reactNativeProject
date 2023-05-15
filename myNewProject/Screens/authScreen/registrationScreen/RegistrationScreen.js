@@ -102,9 +102,8 @@ export default function Registration({ navigation }) {
 
   const uploadPhotoToServer = async () => {
     try {
-      let imageRef
+      let imageRef;
       if (state.avatar) {
-
         const res = await fetch(state.avatar);
         const file = await res.blob();
         const uniqId = uuidv4();
@@ -333,7 +332,6 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
 
     justifyContent: "flex-end",
-    // alignItems: 'center'
   },
 
   imageThumb: {

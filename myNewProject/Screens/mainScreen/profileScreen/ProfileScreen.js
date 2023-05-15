@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Text,
   View,
@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   ImageBackground,
   StyleSheet,
-} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import { Feather } from '@expo/vector-icons';
+} from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { Feather } from "@expo/vector-icons";
 import {
   collection,
   query,
@@ -19,22 +19,22 @@ import {
   updateDoc,
   getDocs,
   orderBy,
-} from 'firebase/firestore';
-import { uploadBytes, ref, getDownloadURL } from 'firebase/storage';
+} from "firebase/firestore";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 
 import { v4 as uuidv4 } from "uuid";
 
-import PostItem from '../../../components/postItem/postItem';
+import PostItem from "../../../components/postItem/postItem";
 import {
   authSignOutUser,
   updateUserAvatar,
-} from '../../../redux/auth/authOperation';
-import { db, storage } from '../../../firebase/config';
-import UserAvatar from '../../../components/userAvatar/userAvatar';
+} from "../../../redux/auth/authOperation";
+import { db, storage } from "../../../firebase/config";
+import UserAvatar from "../../../components/userAvatar/userAvatar";
 
 const ProfileScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
-  const { userId, login, avatar } = useSelector(state => state.auth);
+  const { userId, login, avatar } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,31 +43,31 @@ const ProfileScreen = ({ navigation }) => {
 
   const getUserPosts = async () => {
     const userQuery = query(
-      collection(db, 'posts'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc')
+      collection(db, "posts"),
+      where("userId", "==", userId),
+      orderBy("createdAt", "desc")
     );
 
-    onSnapshot(userQuery, data =>
-      setUserPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id })))
+    onSnapshot(userQuery, (data) =>
+      setUserPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     );
   };
 
-  const updateUserComments = async avatar => {
+  const updateUserComments = async (avatar) => {
     const userQuery = query(
-      collectionGroup(db, 'comments'),
-      where('userId', '==', userId)
+      collectionGroup(db, "comments"),
+      where("userId", "==", userId)
     );
 
     const querySnapshot = await getDocs(userQuery);
-    querySnapshot.forEach(doc => {
+    querySnapshot.forEach((doc) => {
       updateDoc(doc.ref, {
         avatar,
       });
     });
   };
 
-  const uploadPhotoToServer = async avatar => {
+  const uploadPhotoToServer = async (avatar) => {
     let imageRef;
 
     if (avatar) {
@@ -113,7 +113,7 @@ const ProfileScreen = ({ navigation }) => {
     <View style={styles.container}>
       <ImageBackground
         style={styles.bgImage}
-        source={require('../../../images/photoGround.jpg')}
+        source={require("../../../images/photoGround.jpg")}
       >
         <View style={styles.wrapper}>
           <UserAvatar
@@ -133,7 +133,7 @@ const ProfileScreen = ({ navigation }) => {
             <FlatList
               data={userPosts}
               style={styles.postList}
-              keyExtractor={item => item.id}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <PostItem item={item} navigation={navigation} userId={userId} />
               )}
@@ -156,32 +156,32 @@ const styles = StyleSheet.create({
 
   bgImage: {
     flex: 1,
-    resizeMode: 'cover',
+    resizeMode: "cover",
   },
 
   wrapper: {
     flex: 1,
-    position: 'relative',
-    width: '100%',
+    position: "relative",
+    width: "100%",
     marginTop: 147,
     paddingTop: 92,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
   },
 
   btnRight: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
     top: 54,
   },
 
   title: {
     marginBottom: 32,
-    textAlign: 'center',
-    color: '#212121',
-    fontFamily: 'Roboto-Medium',
-    fontWeight: '500',
+    textAlign: "center",
+    color: "#212121",
+    fontFamily: "Roboto-Medium",
+    fontWeight: "500",
     fontSize: 30,
     lineHeight: 35,
     letterSpacing: 0.16,
@@ -194,10 +194,10 @@ const styles = StyleSheet.create({
   },
 
   placeholderText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
     lineHeight: 19,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
   },
 });
 

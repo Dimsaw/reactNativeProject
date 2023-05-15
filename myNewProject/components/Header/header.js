@@ -1,8 +1,8 @@
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
 
-import { authSignOutUser } from '../../redux/auth/authOperation';
+import { authSignOutUser } from "../../redux/auth/authOperation";
 
 const Header = ({ title, back, navigation }) => {
     const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const Header = ({ title, back, navigation }) => {
                 </TouchableOpacity>
             )}
             <Text style={styles.title}>{title}</Text>
-            {title === 'Post' && (
+            {title === "Post" && (
                 <TouchableOpacity
                     style={styles.btnRight}
                     activeOpacity={0.7}
@@ -38,16 +38,16 @@ const Header = ({ title, back, navigation }) => {
 
 const styles = StyleSheet.create({
     header: {
-        justifyContent: 'flex-end',
-        alignItems: 'center',
+        justifyContent: "flex-end",
+        alignItems: "center",
         height: 88,
         borderBottomWidth: 1,
-        borderColor: '#E8E8E8',
-        backgroundColor: '#ffffff',
+        borderColor: "#E8E8E8",
+        backgroundColor: "#ffffff",
     },
 
     btnLeft: {
-        position: 'absolute',
+        position: "absolute",
         left: 16,
         top: 54,
     },
@@ -59,13 +59,13 @@ const styles = StyleSheet.create({
         paddingBottom: 11,
         fontSize: 17,
         lineHeight: 22,
-        color: '#212121',
-        fontWeight: '500',
-        fontFamily: 'Roboto-Medium',
+        color: "#212121",
+        fontWeight: "500",
+        fontFamily: "Roboto-Medium",
     },
 
     btnRight: {
-        position: 'absolute',
+        position: "absolute",
         right: 16,
         top: 54,
     },

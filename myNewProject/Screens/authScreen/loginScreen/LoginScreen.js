@@ -13,7 +13,6 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Dimensions,
-  Button,
 } from "react-native";
 
 import { useDispatch } from "react-redux";
@@ -43,8 +42,6 @@ export default function Login({ navigation }) {
   });
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  // const [login, setLogin] = useState("");
-  // const [email, setEmail] = useState("");
   const [state, setState] = useState({ ...initialState });
 
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);

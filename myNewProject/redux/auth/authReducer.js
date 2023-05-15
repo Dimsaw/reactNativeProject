@@ -6,7 +6,7 @@ const initialState = {
     email: null,
     stateChange: false,
     error: null,
-    avatar: null
+    avatar: null,
 };
 
 export const authSlice = createSlice({
@@ -14,7 +14,6 @@ export const authSlice = createSlice({
     initialState,
 
     reducers: {
-
         updateUserProfile: (state, { payload }) => ({
             ...state,
             userId: payload.userId,
@@ -41,7 +40,6 @@ export const authSlice = createSlice({
             ...state,
             error: payload,
         }),
-
     },
 });
 

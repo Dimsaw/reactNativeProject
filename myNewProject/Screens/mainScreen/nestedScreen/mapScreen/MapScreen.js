@@ -17,10 +17,7 @@ const MapScreen = ({ route }) => {
                     longitudeDelta: 0.007,
                 }}
             >
-                <Marker
-                    coordinate={{ latitude, longitude }}
-                    title={title}
-                />
+                <Marker coordinate={{ latitude, longitude }} title={title} />
             </MapView>
         </View>
     );
@@ -37,4 +34,3 @@ const styles = StyleSheet.create({
         height: "100%",
     },
 });
-

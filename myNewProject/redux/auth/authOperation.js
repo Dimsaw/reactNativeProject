@@ -50,15 +50,12 @@ export const authSignInUser =
         async (dispatch) => {
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-
-
-
             } catch (error) {
                 dispatch(authError(error.message));
             }
         };
 
-export const authSignOutUser = () => async dispatch => {
+export const authSignOutUser = () => async (dispatch) => {
     try {
         await signOut(auth);
         dispatch(authSignOut());
@@ -88,7 +85,7 @@ export const authStateChangeUser = () => async (dispatch) => {
     });
 };
 
-export const updateUserAvatar = avatar => async dispatch => {
+export const updateUserAvatar = (avatar) => async (dispatch) => {
     if (auth.currentUser) {
         try {
             await updateProfile(auth.currentUser, {
