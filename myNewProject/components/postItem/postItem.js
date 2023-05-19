@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import {
     arrayRemove,
@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../../firebase/config";
+import styles from "./postItem.styled";
 
 const PostItem = ({ item, navigation, userId }) => {
     const [commentCount, setCommentCount] = useState([]);
@@ -98,88 +99,6 @@ const PostItem = ({ item, navigation, userId }) => {
     );
 };
 
-const styles = StyleSheet.create({
-    listItem: {
-        width: "100%",
-        marginBottom: 32,
-    },
 
-    img: {
-        height: 240,
-        width: "100%",
-        marginBottom: 8,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: "#E8E8E8",
-    },
-
-    postTitle: {
-        marginBottom: 8,
-        fontSize: 16,
-        lineHeight: 19,
-        color: "#212121",
-        fontWeight: "500",
-        fontFamily: "Roboto-Medium",
-        textAlign: "left",
-    },
-
-    postInfo: {
-        display: "flex",
-        flexDirection: "row",
-    },
-
-    socialsText: {
-        fontSize: 16,
-        lineHeight: 19,
-        color: "#212121",
-        fontFamily: "Roboto-Regular",
-    },
-
-    commentWrapper: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        marginRight: 24,
-    },
-
-    commentIcon: {
-        transform: [{ rotate: "-90deg" }],
-        marginRight: 8,
-    },
-
-    likeWrapper: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-    },
-
-    likeIcon: {
-        marginRight: 6,
-    },
-
-    locationWrapper: {
-        marginLeft: "auto",
-    },
-
-    locationBtn: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-    },
-
-    locationIcon: {
-        marginRight: 4,
-    },
-
-    locationText: {
-        fontSize: 16,
-        lineHeight: 19,
-        color: "#212121",
-        textDecorationStyle: "solid",
-        textDecorationLine: "underline",
-        textDecorationColor: "#212121",
-        fontFamily: "Roboto-Regular",
-    },
-});
 
 export default PostItem;
