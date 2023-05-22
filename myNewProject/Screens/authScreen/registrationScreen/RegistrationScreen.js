@@ -40,7 +40,7 @@ const initialState = {
 const windowDimensions = Dimensions.get("window");
 const screenDimensions = Dimensions.get("screen");
 
-export default function Registration({ navigation }) {
+function Registration({ navigation }) {
   const [windowWidth, setWindowWidth] = useState(
     Dimensions.get("window").width
   );
@@ -105,7 +105,9 @@ export default function Registration({ navigation }) {
       let imageRef;
       if (state.avatar) {
         const res = await fetch(state.avatar);
+        console.log('res', res);
         const file = await res.blob();
+        console.log('file', file);
         const uniqId = uuidv4();
         imageRef = ref(storage, `userAvatars/${uniqId}`);
         await uploadBytes(imageRef, file);
@@ -417,3 +419,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+export default Registration;

@@ -10,6 +10,7 @@ import { db } from "../../../../firebase/config";
 const DefaultScreen = ({ route, navigation }) => {
     const [posts, setPosts] = useState([]);
     const { avatar, login, email, userId } = useSelector((state) => state.auth);
+    console.log("login", login);
     console.log("avatar", avatar);
 
     const getAllPosts = async () => {
