@@ -6,8 +6,9 @@ import {
   FlatList,
   TouchableOpacity,
   ImageBackground,
-  StyleSheet,
+  StyleSheet
 } from "react-native";
+
 import * as ImagePicker from "expo-image-picker";
 import { Feather } from "@expo/vector-icons";
 import {
@@ -31,6 +32,8 @@ import {
 } from "../../../redux/auth/authOperation";
 import { db, storage } from "../../../firebase/config";
 import UserAvatar from "../../../components/userAvatar/userAvatar";
+
+// import styles from "./profileScreen.styled";
 
 const ProfileScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
